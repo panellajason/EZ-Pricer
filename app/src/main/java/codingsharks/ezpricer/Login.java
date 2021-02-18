@@ -50,10 +50,12 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                Log.d(TAG, "Sign in Successful");
                                 final Intent intent = new Intent(Login.this, Main.class);
                                 startActivity(intent);
                                 finish();
                             } else {
+                                Toast.makeText(Login.this, "Credentials do not exist", Toast.LENGTH_SHORT).show();
                                 final String error = task.getException().getMessage();
                                 Log.d(TAG, "Error Message: " + error);
                             }
