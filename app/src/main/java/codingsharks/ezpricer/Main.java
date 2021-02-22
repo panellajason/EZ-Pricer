@@ -19,9 +19,6 @@ public class Main extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
 
 
-
-
-
         }
 
     }
