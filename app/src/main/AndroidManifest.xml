@@ -20,6 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Login"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            />
     </application>
 
 </manifest>

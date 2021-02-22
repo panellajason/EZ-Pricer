@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EZ Pricer</string>
+    <string name="login">Login</string>
+    <string name="button">Login</string>
 </resources>

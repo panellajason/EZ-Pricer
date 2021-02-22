@@ -32,9 +32,9 @@ public class Main extends AppCompatActivity {
         super.onStart();
 
         final FirebaseUser user = mAuth.getCurrentUser();
-        if (user == null) {
+        if (user != null) {
 
-            final Intent i = new Intent(Main.this, CreateAccount.class);
+            final Intent i = new Intent(Main.this, Login.class);
             startActivity(i);
             finish();
         }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size">24sp</dimen>
+    <dimen name="login_title_text_size">46sp</dimen>
+
+    <dimen name="layout_margin">16dp</dimen>
+    <dimen name="small_padding">8dp</dimen>
+    <dimen name="layout_padding">16dp</dimen>
+    <dimen name="title_layout_margin">75dp</dimen>
+
+    <dimen name="login_text_layout_width">130dp</dimen>
+</resources>
