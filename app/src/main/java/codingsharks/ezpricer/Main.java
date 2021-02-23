@@ -11,6 +11,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.Console;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,10 +32,11 @@ public class Main extends AppCompatActivity {
 
             // Create a new db entry with a first and last name
             Map<String, Object> user = new HashMap<>();
-            user.put("item_name", "Shoes");
-            user.put("item_price", 60);
+            user.put("item_name", "Gameboy");
+            user.put("item_price", 600);
+            user.put("userId", mAuth.getCurrentUser().getUid());
 
-            // Add a new document with a generated ID
+            //Add a new document with a generated ID
             db.collection("items")
                     .add(user)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -63,11 +66,15 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         final FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
 
             final Intent i = new Intent(Main.this, Login.class);
+            startActivity(i);
+            finish();
+        }
+        else{
+            final Intent i = new Intent(Main.this,ItemActivity.class);
             startActivity(i);
             finish();
         }
