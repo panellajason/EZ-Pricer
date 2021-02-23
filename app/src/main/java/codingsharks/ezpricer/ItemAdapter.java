@@ -42,8 +42,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Items curr_item = mItemsList.get(position);
         holder.mImageView.setImageResource(curr_item.getmImageResource());
-        holder.mItemTitle.setText(curr_item.getmItemName());
-        holder.mItemDescription.setText(curr_item.getmPrice());
+        holder.mItemTitle.setText(curr_item.getItem_name());
+        holder.mItemDescription.setText(String.valueOf(curr_item.getItem_price()));
     }
 
     @Override
