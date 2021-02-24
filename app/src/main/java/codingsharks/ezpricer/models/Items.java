@@ -1,4 +1,6 @@
-package codingsharks.ezpricer;
+package codingsharks.ezpricer.models;
+
+import codingsharks.ezpricer.R;
 
 public class Items {
     private int mImageResource;

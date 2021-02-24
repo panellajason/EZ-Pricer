@@ -9,20 +9,19 @@
         android:roundIcon="@drawable/shark"
         android:supportsRtl="true"
         android:theme="@style/Theme.EZPricer">
-        <activity android:name=".ItemActivity" />
-        <activity android:name=".Main" />
+        <activity android:name=".activities.Main" />
         <activity
-            android:name=".CreateAccount"
+            android:name=".activities.CreateAccount"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".StartUp"
+            android:name=".random.StartUp"
             android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login"
+        <activity android:name=".activities.Login"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             />
     </application>

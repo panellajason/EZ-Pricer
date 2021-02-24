@@ -1,9 +1,11 @@
-package codingsharks.ezpricer;
+package codingsharks.ezpricer.random;
 
 import android.content.Intent;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import codingsharks.ezpricer.R;
+import codingsharks.ezpricer.activities.Main;
 
 public class StartUp extends AppCompatActivity {
 

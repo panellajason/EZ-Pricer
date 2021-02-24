@@ -1,4 +1,4 @@
-package codingsharks.ezpricer;
+package codingsharks.ezpricer.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import codingsharks.ezpricer.random.LoginController;
+import codingsharks.ezpricer.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,6 +34,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setTitle("Login");
 
         sendCreateAccount = findViewById(R.id.createAccountPageButton);
         loginButton = findViewById(R.id.loginButton);
