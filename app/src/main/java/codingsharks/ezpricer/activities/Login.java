@@ -54,9 +54,7 @@ public class Login extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Log.d(TAG, "Sign in Successful");
-                                final Intent intent = new Intent(Login.this, Main.class);
-                                startActivity(intent);
-                                finish();
+                                sendTo(Main.class);
                             } else {
                                 Toast.makeText(Login.this, "Credentials do not exist", Toast.LENGTH_SHORT).show();
                                 final String error = task.getException().getMessage();
@@ -73,11 +71,14 @@ public class Login extends AppCompatActivity {
         sendCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Intent intent = new Intent(Login.this, CreateAccount.class);
-                startActivity(intent);
-                finish();
+                startActivity(new Intent(Login.this, CreateAccount.class));
             }
         });
 
+    }
+
+    private void sendTo(Class name) {
+        startActivity(new Intent(Login.this, name));
+        finish();
     }
 }

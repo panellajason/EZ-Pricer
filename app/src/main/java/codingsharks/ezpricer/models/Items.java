@@ -14,6 +14,13 @@ public class Items {
         item_price = text2;
 
     }
+
+    public Items(String name, double price, String userid){
+        item_name = name;
+        item_price = price;
+        userId = userid;
+    }
+
     public int getmImageResource() {
         return R.drawable.ic_android_black;
     }
