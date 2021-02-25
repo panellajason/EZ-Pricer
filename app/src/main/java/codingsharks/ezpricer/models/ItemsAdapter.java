@@ -1,5 +1,6 @@
 package codingsharks.ezpricer.models;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,12 @@ public class ItemsAdapter extends FirestoreRecyclerAdapter<Items, ItemsAdapter.I
 
     private OnItemClickListener listener;
 
-    public ItemsAdapter(@NonNull final FirestoreRecyclerOptions<Items> options) {
+    public ItemsAdapter(@NonNull  FirestoreRecyclerOptions<Items> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull final ItemHolder itemHolder, final int position, @NonNull final Items item) {
+    protected void onBindViewHolder(@NonNull ItemHolder itemHolder,  int position, @NonNull Items item) {
         itemHolder.mImageView.setImageResource(item.getmImageResource());
         itemHolder.mItemTitle.setText(item.getItem_name());
         itemHolder.mItemDescription.setText(String.valueOf(item.getItem_price()));
@@ -30,17 +31,18 @@ public class ItemsAdapter extends FirestoreRecyclerAdapter<Items, ItemsAdapter.I
 
     @NonNull
     @Override
-    public ItemHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+    public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent,  int viewType) {
 
         final View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.example_item, parent, false);
         return new ItemHolder(v);
     }
 
-    public void deleteItem(final int position) {
+    public void deleteItem( int position) {
+
         getSnapshots().getSnapshot(position).getReference().delete();
     }
 
-    public void setOnItemClickListener(final OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -54,7 +56,7 @@ public class ItemsAdapter extends FirestoreRecyclerAdapter<Items, ItemsAdapter.I
         public TextView mItemTitle;
         public TextView mItemDescription;
 
-        public ItemHolder(@NonNull final View itemView) {
+        public ItemHolder(@NonNull View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.imageView);
             mItemTitle = itemView.findViewById(R.id.itemName);
@@ -62,7 +64,7 @@ public class ItemsAdapter extends FirestoreRecyclerAdapter<Items, ItemsAdapter.I
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(final View v) {
+                public void onClick( View v) {
                     final int position = getAdapterPosition();
 
                     if (position != RecyclerView.NO_POSITION && listener != null) {

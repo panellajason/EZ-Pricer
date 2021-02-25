@@ -95,7 +95,6 @@ public class Main extends AppCompatActivity {
             case R.id.actionSearch:
                 return true;
             case R.id.actionSettings:
-
                 return true;
             default:
                 return false;
