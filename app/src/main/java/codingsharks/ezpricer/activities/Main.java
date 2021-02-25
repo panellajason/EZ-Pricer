@@ -28,7 +28,7 @@ public class Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Home");
+        setTitle("Your Watchlist");
 
         if (mAuth.getCurrentUser() != null) {
 
@@ -67,7 +67,7 @@ public class Main extends AppCompatActivity {
             }
 
         } else {
-            sendToLogin();
+            sendTo(Login.class);
         }
     }
 
@@ -92,9 +92,11 @@ public class Main extends AppCompatActivity {
             case R.id.actionLogout:
                 logout();
                 return true;
-            case R.id.actionSearch:
+            case R.id.actionAdd:
+                startActivity(new Intent(Main.this, AddItem.class));
                 return true;
             case R.id.actionSettings:
+                startActivity(new Intent(Main.this, AccountPage.class));
                 return true;
             default:
                 return false;
@@ -103,11 +105,11 @@ public class Main extends AppCompatActivity {
 
     private void logout() {
         mAuth.signOut();
-        sendToLogin();
+        sendTo(Login.class);
     }
 
-    private void sendToLogin() {
-        startActivity(new Intent(Main.this, Login.class));
+    private void sendTo(Class name) {
+        startActivity(new Intent(Main.this, name));
         finish();
     }
 
@@ -115,8 +117,7 @@ public class Main extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (mAuth.getCurrentUser() == null) {
-            startActivity(new Intent(Main.this, Login.class));
-            finish();
+            sendTo(Login.class);
         }
 
         bottomNav.setSelectedItemId(R.id.navHome);

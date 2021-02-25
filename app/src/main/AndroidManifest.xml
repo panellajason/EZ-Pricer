@@ -9,6 +9,8 @@
         android:roundIcon="@drawable/shark"
         android:supportsRtl="true"
         android:theme="@style/Theme.EZPricer">
+        <activity android:name=".activities.AccountPage"></activity>
+        <activity android:name=".activities.AddItem" />
         <activity android:name=".activities.Main" />
         <activity
             android:name=".activities.CreateAccount"
@@ -18,12 +20,13 @@
             android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.Login"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            />
+        <activity
+            android:name=".activities.Login"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
     </application>
 
 </manifest>

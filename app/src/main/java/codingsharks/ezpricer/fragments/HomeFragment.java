@@ -1,6 +1,7 @@
 package codingsharks.ezpricer.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -46,7 +47,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("Home");
+        getActivity().setTitle("Your Watchlist");
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         setUpRecyclerView(view);
@@ -55,8 +56,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void setUpRecyclerView(View view) {
-        //this will change (userID = getUserUid())
-        //just making sure db is connected to firebase
+
         Query query = itemRef.whereEqualTo("userId", mAuth.getCurrentUser().getUid());
 
         FirestoreRecyclerOptions<Items> options = new FirestoreRecyclerOptions.Builder<Items>()
@@ -101,10 +101,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 Log.i("ItemOnClick", "TRUE");
+
             }
         });
-
-
     }
 
     @Override
