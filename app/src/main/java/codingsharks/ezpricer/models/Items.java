@@ -20,7 +20,7 @@ public class Items {
         item_price = price;
         userId = userid;
     }
-
+    // NEED TO CHANGE IMAGERESOURCE
     public int getmImageResource() {
         return R.drawable.ic_android_black;
     }
