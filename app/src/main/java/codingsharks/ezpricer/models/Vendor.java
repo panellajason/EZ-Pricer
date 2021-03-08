@@ -1,14 +1,23 @@
 package codingsharks.ezpricer.models;
 
+import codingsharks.ezpricer.R;
+
 public class Vendor {
     private String name;
     private int vendorLogoImageResource;
     private Items item;
 
-
-    public Vendor(String name, int vendorLogoImageResource, Items item) {
+    public Vendor(String name, Items item) {
         this.name = name;
-        this.vendorLogoImageResource = vendorLogoImageResource;
+        if("Walmart".equals(name)){
+            this.vendorLogoImageResource = R.drawable.walmart_logo;
+        }
+        else if ("Bestbuy".equals(name)){
+            this.vendorLogoImageResource = R.drawable.bestbuy_logo;
+        }
+        else{
+            this.vendorLogoImageResource = R.drawable.ic_android_black;
+        }
         this.item = item;
     }
 

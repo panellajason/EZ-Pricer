@@ -1,6 +1,5 @@
 package codingsharks.ezpricer.models;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,7 @@ public class ItemsAdapter extends FirestoreRecyclerAdapter<Items, ItemsAdapter.I
     @Override
     public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent,  int viewType) {
 
-        final View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.example_item, parent, false);
+        final View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row, parent, false);
         return new ItemHolder(v);
     }
 

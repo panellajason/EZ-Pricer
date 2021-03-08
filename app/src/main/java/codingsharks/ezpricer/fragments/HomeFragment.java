@@ -31,7 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 
-public class HomeFragment extends Fragment {
+public class  HomeFragment extends Fragment {
 
     private RecyclerView mRecylerView;
     private ItemsAdapter itemAdapter;
