@@ -1,6 +1,8 @@
 package codingsharks.ezpricer;
 
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,6 +27,7 @@ public class Login extends AppCompatActivity {
     private EditText passwordInput;
     private Button loginButton;
     private TextView sendCreateAccount;
+    private NotificationController notificationController;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -38,12 +41,28 @@ public class Login extends AppCompatActivity {
         emailInput = findViewById(R.id.emailInputField);
         passwordInput = findViewById(R.id.passwordInputField);
 
+        //NOTIFICATIONTEST
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            notificationController = new NotificationController()
+                    .setID("Login")
+                    .setName("Login")
+                    .setTextTitle("Test Title")
+                    .setTextContent("This this message")
+                    .setManagerID(1)
+                    .setManager(getSystemService(NotificationManager.class))
+                    .setContext(Login.this);
+        }
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final String email = emailInput.getText().toString();
                 final String password = passwordInput.getText().toString();
                 LoginController loginControl = new LoginController(email, password);
+
+                //NOTIFICATIONTEST
+                notificationController.createNotification();
+
 
                 if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
                     auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
