@@ -1,4 +1,4 @@
-package codingsharks.ezpricer;
+package codingsharks.ezpricer.activities;
 
 import android.content.Intent;
 import android.text.TextUtils;
@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import codingsharks.ezpricer.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,7 +26,7 @@ public class CreateAccount extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
-        setTitle("Create Account");
+        setTitle("Create an Account");
 
         emailET = findViewById(R.id.emailET);
         passwordET = findViewById(R.id.passwordET);
