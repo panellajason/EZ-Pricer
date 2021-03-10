@@ -15,7 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import codingsharks.ezpricer.random.LoginController;
+import codingsharks.ezpricer.random.NotificationController;
 import codingsharks.ezpricer.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

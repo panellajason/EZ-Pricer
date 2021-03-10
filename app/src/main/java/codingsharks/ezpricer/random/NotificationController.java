@@ -1,4 +1,4 @@
-package codingsharks.ezpricer;
+package codingsharks.ezpricer.random;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -6,6 +6,8 @@ import android.content.Context;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
+import codingsharks.ezpricer.R;
 
 public class NotificationController {
     String CHANNEL_ID;
@@ -17,9 +19,9 @@ public class NotificationController {
     NotificationManager manager;
     Context context;
 
-    NotificationController(){};
+    public NotificationController(){};
 
-    NotificationController(String id, String channelName, String textTitle, String textContent, int managerID, NotificationManager manager, Context context) {
+    public NotificationController(String id, String channelName, String textTitle, String textContent, int managerID, NotificationManager manager, Context context) {
         this.CHANNEL_ID = id;
         this.CHANNEL_NAME = channelName;
         this.textTitle = textTitle;
@@ -29,42 +31,42 @@ public class NotificationController {
         this.context = context;
     };
 
-    NotificationController setID(String id) {
+    public NotificationController setID(String id) {
         this.CHANNEL_ID = id;
         return this;
     }
 
-    NotificationController setName(String channelName) {
+    public NotificationController setName(String channelName) {
         this.CHANNEL_NAME = channelName;
         return this;
     }
 
-    NotificationController setTextTitle(String textTitle) {
+    public NotificationController setTextTitle(String textTitle) {
         this.textTitle = textTitle;
         return this;
     }
 
-    NotificationController setTextContent(String textContent) {
+    public NotificationController setTextContent(String textContent) {
         this.textContent = textContent;
         return this;
     }
 
-    NotificationController setManagerID(int managerID) {
+    public NotificationController setManagerID(int managerID) {
         this.managerID = managerID;
         return this;
     }
 
-    NotificationController setManager(NotificationManager manager) {
+    public NotificationController setManager(NotificationManager manager) {
         this.manager = manager;
         return this;
     }
 
-    NotificationController setContext(Context context) {
+    public NotificationController setContext(Context context) {
         this.context = context;
         return this;
     }
 
-    void createNotification() {
+    public void createNotification() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             int notificationImportance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel notificationChannel = new NotificationChannel(
