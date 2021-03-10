@@ -58,7 +58,6 @@ public class Login extends AppCompatActivity {
             public void onClick(View view) {
                 final String email = emailInput.getText().toString();
                 final String password = passwordInput.getText().toString();
-                LoginController loginControl = new LoginController(email, password);
 
                 //NOTIFICATIONTEST
                 notificationController.createNotification();
