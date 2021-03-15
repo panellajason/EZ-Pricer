@@ -14,13 +14,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateAccount extends AppCompatActivity {
 
     private EditText emailET, passwordET, confirmPasswordET;
     private Button createAccountBTN;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference itemRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +54,18 @@ public class CreateAccount extends AppCompatActivity {
                             public void onComplete(@NonNull final Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
 
-                                    // add user settings here
+                                    db = FirebaseFirestore.getInstance();
+                                    itemRef = db.collection("user_settings");
 
-                                    final Intent i = new Intent(CreateAccount.this, Main.class);
-                                    startActivity(i);
+                                    final Map<String, String> map = new HashMap<>();
+                                    map.put("phone_number", "000-000-0000");
+                                    map.put("text_notification", "0");
+                                    map.put("app_notification", "0");
+                                    map.put("email_notification", "0");
+
+                                    itemRef.document(mAuth.getUid()).set(map);
+
+                                    startActivity(new Intent(CreateAccount.this, AccountPage.class));
                                     finish();
 
                                 } else {
