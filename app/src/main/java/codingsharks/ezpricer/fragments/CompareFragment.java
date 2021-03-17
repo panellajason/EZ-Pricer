@@ -81,7 +81,7 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
 //        vendorsList.add(BestBuyVendorTest);
 
         //UNCOMMENT THIIS
-        new RequestWalmartAPI().execute();
+        //new RequestWalmartAPI().execute();
 
         vendorListAdapter adapter = new vendorListAdapter(this.getContext(), R.layout.vendor_row, vendorsList);
         mListView.setAdapter(adapter);
