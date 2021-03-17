@@ -7,6 +7,7 @@ public class Items {
     private String item_name;
     private double item_price;
     private String userId;
+    private String description;
     public Items(){
     }
     public Items(String text1, double text2){
@@ -15,12 +16,26 @@ public class Items {
 
     }
 
-    public Items(String name, double price, String userid, String url){
+    public Items(String name, double price, String userid, String url, String desc){
         item_name = name;
         item_price = price;
         userId = userid;
         imageUrl = url;
+        description = desc;
     }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Items(String name, double price, String userid){
         item_name = name;
         item_price = price;

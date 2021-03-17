@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.squareup.okhttp.OkHttpClient;
@@ -42,6 +44,9 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
     private ArrayList<Vendor> vendorsList;
     private View view_main;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference itemRef = db.collection("items");
     public CompareFragment() {
         // Required empty public constructor
     }
@@ -71,11 +76,12 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
 //        Vendor BestBuyVendorTest = new Vendor("Bestbuy",item2);
 
 
+
 //        vendorsList.add(WalmartVendorTest);
 //        vendorsList.add(BestBuyVendorTest);
 
         //UNCOMMENT THIIS
-        //new RequestWalmartAPI().execute();
+        new RequestWalmartAPI().execute();
 
         vendorListAdapter adapter = new vendorListAdapter(this.getContext(), R.layout.vendor_row, vendorsList);
         mListView.setAdapter(adapter);
@@ -107,10 +113,10 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
                         String image_url = array.getJSONObject(i).getString("imageUrl");
                         JSONObject price = array.getJSONObject(i).getJSONObject("primaryOffer");
                         double item_price = price.getDouble("offerPrice");
-
+                        String description = array.getJSONObject(i).getString("description");
                         Log.i("ITEM URL", image_url);
                         Log.i("ITEM PRICE:", String.valueOf(price.getDouble("offerPrice")));
-                        return new Items("ipad", item_price, mAuth.getCurrentUser().getUid(),image_url);
+                        return new Items("ipad", item_price, mAuth.getCurrentUser().getUid(),image_url,description);
                     }
                 }
 //                Log.i("WalmartItem", (String) json2.get("ppu"));
@@ -126,6 +132,7 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
             LoadImageFromWeb(result.getImageUrl());
             Vendor WalmartVendorTest = new Vendor("Walmart",result);
             vendorsList.add(WalmartVendorTest);
+            itemRef.add(result);
         }
     }
 
