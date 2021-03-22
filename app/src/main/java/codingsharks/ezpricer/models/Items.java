@@ -42,8 +42,8 @@ public class Items {
         userId = userid;
     }    // NEED TO CHANGE IMAGERESOURCE
 
-    public int getmImageResource() {
-        return R.drawable.ic_android_black;
+    public String getmImageResource() {
+        return imageUrl;
     }
 
     public String getImageUrl() {

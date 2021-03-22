@@ -5,12 +5,16 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -36,11 +40,10 @@ import codingsharks.ezpricer.models.Vendor;
 import codingsharks.ezpricer.models.vendorListAdapter;
 
 
-public class CompareFragment extends Fragment implements View.OnClickListener {
-
+public class CompareFragment extends Fragment{
     private ListView mListView;
     private ImageView pImage;
-    private Button submitButton;
+    private EditText itemET;
     private ArrayList<Vendor> vendorsList;
     private View view_main;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -59,43 +62,43 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
         //search and add items to
         pImage = view_main.findViewById(R.id.productImage);
 
-        submitButton = view_main.findViewById(R.id.APISubmitButton);
-        submitButton.setOnClickListener(this);
-
+        itemET = view_main.findViewById(R.id.searchbox);
+        itemET.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+                    Log.i("TextView upon clicked", String.valueOf(itemET.getText()));
+                    createVendorListView(view_main, String.valueOf(itemET.getText()));
+                    return true;
+                }
+                return false;
+            }
+        });
         return view_main;
     }
     private void LoadImageFromWeb(String url){
         Picasso.get().load(url).into(pImage);
     }
-    private void createVendorListView(View view) {
+    private void createVendorListView(View view, String itemName) {
         mListView = view.findViewById(R.id.vendorListView);
-
-//        Items item = new Items("Shoes",60.0,mAuth.getCurrentUser().getUid());
-//        Vendor WalmartVendorTest = new Vendor("Walmart",item);
-//        Items item2 = new Items("Shoes",100.0,mAuth.getCurrentUser().getUid());
-//        Vendor BestBuyVendorTest = new Vendor("Bestbuy",item2);
-
-
-
-//        vendorsList.add(WalmartVendorTest);
-//        vendorsList.add(BestBuyVendorTest);
+        Log.i("TextView upon clicked", String.valueOf(itemET.getText()));
 
         //UNCOMMENT THIIS
-        //new RequestWalmartAPI().execute();
+        new RequestWalmartAPI().execute(itemName);
 
         vendorListAdapter adapter = new vendorListAdapter(this.getContext(), R.layout.vendor_row, vendorsList);
         mListView.setAdapter(adapter);
     }
-    @Override
-    public void onClick(View view) {
-        createVendorListView(view_main);
-    }
-    private class RequestWalmartAPI extends AsyncTask<Void, Void, Items> {
+    private class RequestWalmartAPI extends AsyncTask<String, Void, Items> {
 
         @Override
-        protected Items doInBackground(Void... voids) {
+        protected Items doInBackground(String... strings) {
+            Log.i("String[0] is", strings[0]);
             OkHttpClient client = new OkHttpClient();
-            String url = "https://walmart2.p.rapidapi.com/search?query=" + "playstation 5" + "&page=1";
+            String url = "https://walmart2.p.rapidapi.com/search?query=" + strings[0] + "&page=1";
             try {
                 Request request = new Request.Builder()
                         .url(url)
@@ -114,9 +117,12 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
                         JSONObject price = array.getJSONObject(i).getJSONObject("primaryOffer");
                         double item_price = price.getDouble("offerPrice");
                         String description = array.getJSONObject(i).getString("description");
+                        String item_name = array.getJSONObject(i).getString("title");
+                        Log.i("ITEM name", item_name);
                         Log.i("ITEM URL", image_url);
                         Log.i("ITEM PRICE:", String.valueOf(price.getDouble("offerPrice")));
-                        return new Items("ipad", item_price, mAuth.getCurrentUser().getUid(),image_url,description);
+                        //change item_name
+                        return new Items(item_name, item_price, mAuth.getCurrentUser().getUid(),image_url,description);
                     }
                 }
 //                Log.i("WalmartItem", (String) json2.get("ppu"));
@@ -129,6 +135,7 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Items result){
             Log.i("Item", result.toString());
+            vendorsList = new ArrayList<>();
             LoadImageFromWeb(result.getImageUrl());
             Vendor WalmartVendorTest = new Vendor("Walmart",result);
             vendorsList.add(WalmartVendorTest);
