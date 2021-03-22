@@ -1,6 +1,7 @@
 package codingsharks.ezpricer.activities;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,12 +18,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class AccountPage extends AppCompatActivity {
+public class AccountPage extends AppCompatActivity implements ChangePasswordDialog.ExampleDialogListener{
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String email = mAuth.getCurrentUser().getEmail();
@@ -60,6 +62,13 @@ public class AccountPage extends AppCompatActivity {
 
         displaySettings();
 
+        changePasswordTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                openDialog();
+            }
+        });
+
         saveBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -85,7 +94,34 @@ public class AccountPage extends AppCompatActivity {
                 saveBTN.setVisibility(View.VISIBLE);
             }
         });
+    }
 
+    private void openDialog() {
+        ChangePasswordDialog dialog = new ChangePasswordDialog();
+        dialog.show(getSupportFragmentManager(), "changePass dialog");
+    }
+
+    @Override
+    public void applyTexts(String password, String password2) {
+        if (password == password2)
+            changePassword(password);
+        else
+            Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_LONG).show();
+    }
+
+    private void changePassword(String password) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.updatePassword(password)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            //close dialog
+                            Toast.makeText(getApplicationContext(), "Password successfully changed", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
 
     private void saveSettings() {
@@ -105,7 +141,6 @@ public class AccountPage extends AppCompatActivity {
                         }
                     }
                 });
-
     }
 
     private void displaySettings() {
