@@ -1,4 +1,4 @@
-package codingsharks.ezpricer.activities;
+package codingsharks.ezpricer.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -11,17 +11,17 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import codingsharks.ezpricer.R;
 
-public class ChangePasswordDialog extends AppCompatDialogFragment {
-    private EditText passwordET;
-    private EditText password2ET;
-    private ExampleDialogListener listener;
+public class ChangeNumberDialog extends AppCompatDialogFragment {
+    private EditText numberET;
+    private EditText number2ET;
+    private PhoneDialogListener listener;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_changepassword, null);
+        View view = inflater.inflate(R.layout.dialog_changenumber, null);
         builder.setView(view)
-                .setTitle("Change password")
+                .setTitle("Change phone number")
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -30,26 +30,27 @@ public class ChangePasswordDialog extends AppCompatDialogFragment {
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String password = passwordET.getText().toString().trim();
-                        String password2 = password2ET.getText().toString().trim();
-                        listener.applyTexts(password, password2);
+                        String number = numberET.getText().toString().trim();
+                        String number2 = number2ET.getText().toString().trim();
+                        listener.applyChange(number, number2);
                     }
                 });
-        passwordET = view.findViewById(R.id.oldPassET);
-        password2ET = view.findViewById(R.id.newPassET);
+        numberET = view.findViewById(R.id.numberET);
+        number2ET = view.findViewById(R.id.number2ET);
         return builder.create();
     }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            listener = (ExampleDialogListener) context;
+            listener = (PhoneDialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() +
                     "must implement ExampleDialogListener");
         }
     }
-    public interface ExampleDialogListener {
-        void applyTexts(String password, String password2);
+    public interface PhoneDialogListener {
+        void applyChange(String number, String number2);
     }
 }
+
