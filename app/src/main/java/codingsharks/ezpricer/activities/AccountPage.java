@@ -1,11 +1,9 @@
 package codingsharks.ezpricer.activities;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,21 +11,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import codingsharks.ezpricer.R;
+import codingsharks.ezpricer.dialogs.ChangeNumberDialog;
+import codingsharks.ezpricer.dialogs.ChangePasswordDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class AccountPage extends AppCompatActivity implements ChangePasswordDialog.ExampleDialogListener{
+public class AccountPage extends AppCompatActivity implements ChangePasswordDialog.ExampleDialogListener, ChangeNumberDialog.PhoneDialogListener{
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String email = mAuth.getCurrentUser().getEmail();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DocumentReference userItemRef = db.document("user_settings/" + mAuth.getUid());
 
@@ -59,13 +57,21 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
         changePasswordTV = findViewById(R.id.changePasswordTV);
         saveBTN = findViewById(R.id.saveBTN);
         saveBTN.setVisibility(View.INVISIBLE);
-
+        String email = mAuth.getCurrentUser().getEmail();
+        emailTV.setText("Email: " + email);
         displaySettings();
 
         changePasswordTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 openDialog();
+            }
+        });
+
+        editTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                openPhoneDialog();
             }
         });
 
@@ -101,12 +107,32 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
         dialog.show(getSupportFragmentManager(), "changePass dialog");
     }
 
+    private void openPhoneDialog() {
+        ChangeNumberDialog dialog = new ChangeNumberDialog();
+        dialog.show(getSupportFragmentManager(), "changeNum dialog");
+    }
+
     @Override
     public void applyTexts(String password, String password2) {
         if (password.equals(password2))
             changePassword(password);
         else
             Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void applyChange(final String number, final String number2) {
+        if (number.equals(number2)) {
+            if (number.length() == 10) {
+                phoneNumberTV.setText(number);
+                savePhoneNumber(number);
+            } else {
+                Toast.makeText(getApplicationContext(), "Not a valid phone number", Toast.LENGTH_LONG).show();
+            }
+
+        }
+        else
+            Toast.makeText(getApplicationContext(), "Phone numbers do not match", Toast.LENGTH_LONG).show();
     }
 
     private void changePassword(String password) {
@@ -124,8 +150,22 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
                 });
     }
 
-    private void saveSettings() {
+    private void savePhoneNumber(String number) {
+        userItemRef.update("phone_number", number)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull final Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Phone number Saved", Toast.LENGTH_SHORT).show();
+                            displaySettings();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
 
+    private void saveSettings() {
         userItemRef.update("text_notification", textSwitch.isChecked() ? 1 + "" : 0 + "",
                 "app_notification", appSwitch.isChecked() ? 1 + "" : 0 + "",
                 "email_notification", emailSwitch.isChecked() ? 1 + "" : 0 + "")
@@ -149,9 +189,12 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
             public void onSuccess(final DocumentSnapshot documentSnapshot) {
 
                 if (documentSnapshot.exists()) {
+                    String number = documentSnapshot.getString("phone_number");
+                    String formattedNumber = number.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
 
-                    phoneNumberTV.setText("Phone Number: " + documentSnapshot.getString("phone_number"));
+                    String email = mAuth.getCurrentUser().getEmail();
                     emailTV.setText("Email: " + email);
+                    phoneNumberTV.setText("Phone Number: " + formattedNumber);
 
                     textSwitch.setChecked(Integer.parseInt(documentSnapshot.getString("text_notification")) == 1);
                     appSwitch.setChecked(Integer.parseInt(documentSnapshot.getString("app_notification")) == 1);
