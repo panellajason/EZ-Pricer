@@ -11,6 +11,7 @@ import codingsharks.ezpricer.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.squareup.picasso.Picasso;
 
 public class ItemsAdapter extends FirestoreRecyclerAdapter<Items, ItemsAdapter.ItemHolder> {
 
@@ -22,22 +23,19 @@ public class ItemsAdapter extends FirestoreRecyclerAdapter<Items, ItemsAdapter.I
 
     @Override
     protected void onBindViewHolder(@NonNull ItemHolder itemHolder,  int position, @NonNull Items item) {
-        itemHolder.mImageView.setImageResource(item.getmImageResource());
+        Picasso.get().load(item.getmImageResource()).into(itemHolder.mImageView);
         itemHolder.mItemTitle.setText(item.getItem_name());
         itemHolder.mItemDescription.setText(String.valueOf(item.getItem_price()));
     }
 
-
     @NonNull
     @Override
     public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent,  int viewType) {
-
         final View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row, parent, false);
         return new ItemHolder(v);
     }
 
     public void deleteItem( int position) {
-
         getSnapshots().getSnapshot(position).getReference().delete();
     }
 
