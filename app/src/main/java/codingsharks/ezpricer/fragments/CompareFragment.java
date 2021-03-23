@@ -135,7 +135,7 @@ public class CompareFragment extends Fragment{
         @Override
         protected void onPostExecute(Items result){
             Log.i("Item", result.toString());
-            vendorsList = new ArrayList<>();
+            vendorsList.clear();
             LoadImageFromWeb(result.getImageUrl());
             Vendor WalmartVendorTest = new Vendor("Walmart",result);
             vendorsList.add(WalmartVendorTest);
