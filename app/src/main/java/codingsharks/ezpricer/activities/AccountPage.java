@@ -103,7 +103,7 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
 
     @Override
     public void applyTexts(String password, String password2) {
-        if (password == password2)
+        if (password.equals(password2))
             changePassword(password);
         else
             Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_LONG).show();

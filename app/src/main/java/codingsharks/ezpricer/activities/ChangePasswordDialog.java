@@ -21,7 +21,7 @@ public class ChangePasswordDialog extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_changepassword, null);
         builder.setView(view)
-                .setTitle("Login")
+                .setTitle("Change password")
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -30,8 +30,8 @@ public class ChangePasswordDialog extends AppCompatDialogFragment {
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String password = passwordET.getText().toString();
-                        String password2 = password2ET.getText().toString();
+                        String password = passwordET.getText().toString().trim();
+                        String password2 = password2ET.getText().toString().trim();
                         listener.applyTexts(password, password2);
                     }
                 });
