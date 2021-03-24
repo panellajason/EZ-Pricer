@@ -34,9 +34,9 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
     private Switch emailSwitch;
 
     private TextView phoneNumberTV;
-    private TextView emailTV;
     private TextView editTV;
     private TextView changePasswordTV;
+    private TextView logoutTV;
 
     private Button saveBTN;
 
@@ -52,19 +52,25 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
         appSwitch = findViewById(R.id.appSwitch);
         emailSwitch = findViewById(R.id.emailSwitch);
         phoneNumberTV = findViewById(R.id.phoneNumberTV);
-        emailTV = findViewById(R.id.emailTV);
         editTV = findViewById(R.id.editNumberTV);
         changePasswordTV = findViewById(R.id.changePasswordTV);
+        logoutTV = findViewById(R.id.logoutTV);
         saveBTN = findViewById(R.id.saveBTN);
         saveBTN.setVisibility(View.INVISIBLE);
         String email = mAuth.getCurrentUser().getEmail();
-        emailTV.setText("Email: " + email);
         displaySettings();
 
         changePasswordTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 openDialog();
+            }
+        });
+
+        logoutTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                logout();
             }
         });
 
@@ -129,7 +135,6 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
             } else {
                 Toast.makeText(getApplicationContext(), "Not a valid phone number", Toast.LENGTH_LONG).show();
             }
-
         }
         else
             Toast.makeText(getApplicationContext(), "Phone numbers do not match", Toast.LENGTH_LONG).show();
@@ -143,7 +148,6 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            //close dialog
                             Toast.makeText(getApplicationContext(), "Password successfully changed", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -193,7 +197,6 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
                     String formattedNumber = number.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
 
                     String email = mAuth.getCurrentUser().getEmail();
-                    emailTV.setText("Email: " + email);
                     phoneNumberTV.setText("Phone Number: " + formattedNumber);
 
                     textSwitch.setChecked(Integer.parseInt(documentSnapshot.getString("text_notification")) == 1);
@@ -216,5 +219,15 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        mAuth.signOut();
+        sendTo(Login.class);
+    }
+
+    private void sendTo(Class name) {
+        startActivity(new Intent(AccountPage.this, name));
+        finish();
     }
 }

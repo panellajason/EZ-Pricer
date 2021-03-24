@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class CreateAccount extends AppCompatActivity {
 
     private EditText emailET, passwordET, confirmPasswordET;
+    private TextView alreadyHaveAccountTV;
     private Button createAccountBTN;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -37,6 +39,7 @@ public class CreateAccount extends AppCompatActivity {
         passwordET = findViewById(R.id.passwordET);
         confirmPasswordET = findViewById(R.id.confirmPasswordET);
         createAccountBTN = findViewById(R.id.createBTN);
+        alreadyHaveAccountTV = findViewById(R.id.alreadyLoginTV);
 
         createAccountBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +85,14 @@ public class CreateAccount extends AppCompatActivity {
                 } else {
                     Toast.makeText(CreateAccount.this, "Missing information", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        alreadyHaveAccountTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                startActivity(new Intent(CreateAccount.this, Login.class));
+                finish();
             }
         });
     }
