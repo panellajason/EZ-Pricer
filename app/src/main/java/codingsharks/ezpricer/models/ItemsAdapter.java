@@ -1,5 +1,7 @@
 package codingsharks.ezpricer.models;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,7 @@ public class ItemsAdapter extends FirestoreRecyclerAdapter<Items, ItemsAdapter.I
 
     @Override
     protected void onBindViewHolder(@NonNull ItemHolder itemHolder,  int position, @NonNull Items item) {
-        Picasso.get().load(item.getmImageResource()).into(itemHolder.mImageView);
+        Picasso.get().load(item.getImageUrl()).into(itemHolder.mImageView);
         itemHolder.mItemTitle.setText(item.getItem_name());
         itemHolder.mItemDescription.setText(String.valueOf(item.getItem_price()));
     }
@@ -66,6 +68,8 @@ public class ItemsAdapter extends FirestoreRecyclerAdapter<Items, ItemsAdapter.I
 
                     if (position != RecyclerView.NO_POSITION && listener != null) {
                         listener.onItemClick(getSnapshots().getSnapshot(position), position);
+//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+//                        v.getContext().startActivity(browserIntent);
                     }
                 }
             });
