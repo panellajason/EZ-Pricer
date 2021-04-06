@@ -27,7 +27,7 @@ public class ItemsAdapter extends FirestoreRecyclerAdapter<Items, ItemsAdapter.I
     protected void onBindViewHolder(@NonNull ItemHolder itemHolder,  int position, @NonNull Items item) {
         Picasso.get().load(item.getImageUrl()).into(itemHolder.mImageView);
         itemHolder.mItemTitle.setText(item.getItem_name());
-        itemHolder.mItemDescription.setText(String.valueOf(item.getItem_price()));
+        itemHolder.mItemDescription.setText("$" + String.valueOf(item.getItem_price()));
     }
 
     @NonNull
@@ -68,8 +68,6 @@ public class ItemsAdapter extends FirestoreRecyclerAdapter<Items, ItemsAdapter.I
 
                     if (position != RecyclerView.NO_POSITION && listener != null) {
                         listener.onItemClick(getSnapshots().getSnapshot(position), position);
-//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
-//                        v.getContext().startActivity(browserIntent);
                     }
                 }
             });
