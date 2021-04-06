@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -101,7 +102,10 @@ public class  HomeFragment extends Fragment {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 Log.i("ItemOnClick", "TRUE");
-
+                Items item = documentSnapshot.toObject(Items.class);
+                String productURL = item.getProductUrl();
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(productURL));
+                startActivity(browserIntent);
             }
         });
     }

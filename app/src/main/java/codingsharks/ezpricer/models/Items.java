@@ -8,6 +8,7 @@ public class Items {
     private double item_price;
     private String userId;
     private String description;
+    private String productUrl;
     public Items(){
     }
     public Items(String text1, double text2){
@@ -16,12 +17,21 @@ public class Items {
 
     }
 
-    public Items(String name, double price, String userid, String url, String desc){
+    public String getProductUrl() {
+        return productUrl;
+    }
+
+    public void setProductUrl(String productUrl) {
+        this.productUrl = productUrl;
+    }
+
+    public Items(String name, double price, String userid, String url, String productURL, String desc){
         item_name = name;
         item_price = price;
         userId = userid;
         imageUrl = url;
         description = desc;
+        productUrl = productURL;
     }
 
     public void setImageUrl(String imageUrl) {
@@ -42,9 +52,6 @@ public class Items {
         userId = userid;
     }    // NEED TO CHANGE IMAGERESOURCE
 
-    public String getmImageResource() {
-        return imageUrl;
-    }
 
     public String getImageUrl() {
         return imageUrl;
