@@ -26,19 +26,25 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_toRightOf="@+id/imageView"
-            android:paddingLeft="10dp"/>
+            android:paddingLeft="10dp"
+            android:maxLines="1"/>
 
         <TextView
             android:id="@+id/Description"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/itemName"
-            android:layout_marginStart="273dp"
-            android:layout_marginLeft="273dp"
-            android:layout_marginTop="-25dp"
+            android:layout_gravity="end"
+            android:layout_marginStart="259dp"
+            android:layout_marginLeft="259dp"
+            android:layout_marginTop="-1dp"
             android:layout_toEndOf="@+id/imageView"
             android:layout_toRightOf="@+id/imageView"
-            android:textSize="15sp" />
+            android:layout_marginRight="10dp"
+            android:textAlignment="textEnd"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="10dp" />
     </RelativeLayout>
 
 
