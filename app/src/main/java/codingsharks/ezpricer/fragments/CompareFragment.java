@@ -67,6 +67,9 @@ public class CompareFragment extends Fragment{
         pImage = view_main.findViewById(R.id.productImage);
 
         itemET = view_main.findViewById(R.id.searchbox);
+
+        //----set bundles if not null
+
         itemET.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -109,7 +112,6 @@ public class CompareFragment extends Fragment{
 
     }
     private class RequestWalmartAPI extends AsyncTask<String, Void, Items> {
-
         @Override
         protected Items doInBackground(String... strings) {
             Log.i("String[0] is", strings[0]);
@@ -187,11 +189,17 @@ public class CompareFragment extends Fragment{
 
                 String item_name = jArray.getJSONObject(0).getString("title");
                 String item_price = jArray.getJSONObject(0).getString("price");
-                String item_image = jArray.getJSONObject(0).getString("imageURL");
+                String item_image = jArray.getJSONObject(0).getString("imageUrl");
                 String item_url = jArray.getJSONObject(0).getString("detailPageURL");
+                Double newPrice = Double.parseDouble(item_price.replace("$", ""));
 
-                Double newPrice = Double.parseDouble(item_price);
-                return new Items(item_name, newPrice, mAuth.getCurrentUser().getUid(),item_image,"");
+                Log.i("ITEM name", item_name);
+                Log.i("ITEM URL", item_price);
+                Log.i("ITEM PRICE:", newPrice+"");
+                Log.i("ITEM image", item_image);
+
+
+                return new Items(item_name, newPrice, mAuth.getCurrentUser().getUid(),item_image, item_url,"");
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
@@ -199,8 +207,17 @@ public class CompareFragment extends Fragment{
 
             return null;
         }
+
+        @Override
+        protected void onPostExecute(Items result){
+            Log.i("AMAZON", result.toString());
+            //vendorsList.clear();
+            //LoadImageFromWeb(result.getImageUrl());
+            Vendor amazonVendorTest = new Vendor("Amazon",result);
+            vendorsList.add(amazonVendorTest);
+            Log.i("DONE", "done");
+        }
     }
 
 
-
-    }
+}
