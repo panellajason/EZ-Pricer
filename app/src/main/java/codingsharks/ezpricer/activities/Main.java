@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ public class Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Your Watchlist");
+        bottomNav = findViewById(R.id.bottomNav);
 
         if (mAuth.getCurrentUser() != null) {
 
@@ -36,9 +38,7 @@ public class Main extends AppCompatActivity {
             compareFragment = new CompareFragment();
             notificationsFragment = new NotificationsFragment();
 
-            bottomNav = findViewById(R.id.bottomNav);
-
-            replaceFragment(homeFragment);
+            //replaceFragment(homeFragment);
 
             bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -93,7 +93,7 @@ public class Main extends AppCompatActivity {
                 logout();
                 return true;
             case R.id.actionCam:
-                startActivity(new Intent(Main.this, BarcodeScanner.class));
+                startActivity(new Intent(Main.this, BarcodeScan.class));
                 return true;
             case R.id.actionSettings:
                 startActivity(new Intent(Main.this, AccountPage.class));
@@ -116,11 +116,17 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        bottomNav.setSelectedItemId(R.id.navHome);
         if (mAuth.getCurrentUser() == null) {
             sendTo(Login.class);
         }
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            final String upc = extras.getString("upc");
+            replaceFragment(compareFragment);
+            bottomNav.setSelectedItemId(R.id.navCompare);
+            Toast.makeText(getApplicationContext(), "UPC:" + upc, Toast.LENGTH_SHORT).show();
 
-        bottomNav.setSelectedItemId(R.id.navHome);
-
+        }
     }
 }

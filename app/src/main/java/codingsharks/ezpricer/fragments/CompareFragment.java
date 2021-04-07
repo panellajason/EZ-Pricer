@@ -68,8 +68,6 @@ public class CompareFragment extends Fragment{
 
         itemET = view_main.findViewById(R.id.searchbox);
 
-        //----set bundles if not null
-
         itemET.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
