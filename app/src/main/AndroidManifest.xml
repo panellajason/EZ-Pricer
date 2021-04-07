@@ -14,7 +14,7 @@
         android:roundIcon="@drawable/shark"
         android:supportsRtl="true"
         android:theme="@style/Theme.EZPricer">
-        <activity android:name=".activities.BarcodeScanner"></activity>
+        <activity android:name=".activities.BarcodeScan"></activity>
         <activity android:name=".activities.AccountPage" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>
