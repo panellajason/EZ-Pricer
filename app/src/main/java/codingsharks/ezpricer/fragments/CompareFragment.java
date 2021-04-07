@@ -92,6 +92,7 @@ public class CompareFragment extends Fragment{
 
         //UNCOMMENT THIIS
         new RequestWalmartAPI().execute(itemName);
+        new RequestAmazonAPI().execute(itemName);
 
         vendorListAdapter adapter = new vendorListAdapter(this.getContext(), R.layout.vendor_row, vendorsList);
         mListView.setAdapter(adapter);
@@ -159,6 +160,58 @@ public class CompareFragment extends Fragment{
             Vendor WalmartVendorTest = new Vendor("Walmart",result);
             vendorsList.add(WalmartVendorTest);
 //            itemRef.add(result);
+            Log.i("DONE", "done");
+        }
+    }
+
+    private class RequestAmazonAPI extends AsyncTask<String, Void, Items> {
+
+        @Override
+        protected Items doInBackground(final String... strings) {
+            Log.i("String[0] is", strings[0]);
+            String url = "https://amazon-price1.p.rapidapi.com/search?keywords=" + strings[0] + "&marketplace=US";
+
+            try {
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .get()
+                        .addHeader("x-rapidapi-key", "11b6ebdc42msh09ac88d621f6ab5p177cdfjsn50498d090800")
+                        .addHeader("x-rapidapi-host", "amazon-price1.p.rapidapi.com")
+                        .build();
+                Response response = client.newCall(request).execute();
+                String jsonData = response.body().string();
+                Log.i("Amazon API", jsonData);
+                JSONArray jArray= new JSONArray(jsonData);
+
+                String item_name = jArray.getJSONObject(0).getString("title");
+                String item_price = jArray.getJSONObject(0).getString("price");
+                String item_image = jArray.getJSONObject(0).getString("imageUrl");
+                String item_url = jArray.getJSONObject(0).getString("detailPageURL");
+                Double newPrice = Double.parseDouble(item_price.replace("$", ""));
+
+                Log.i("ITEM name", item_name);
+                Log.i("ITEM URL", item_price);
+                Log.i("ITEM PRICE:", newPrice+"");
+                Log.i("ITEM image", item_image);
+
+
+                return new Items(item_name, newPrice, mAuth.getCurrentUser().getUid(),item_image, item_url,"");
+
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Items result){
+            Log.i("AMAZON", result.toString());
+            //vendorsList.clear();
+            //LoadImageFromWeb(result.getImageUrl());
+            Vendor amazonVendorTest = new Vendor("Amazon",result);
+            vendorsList.add(amazonVendorTest);
             Log.i("DONE", "done");
         }
     }
