@@ -12,18 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -33,13 +28,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Console;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
 import codingsharks.ezpricer.R;
 import codingsharks.ezpricer.models.Items;
-import codingsharks.ezpricer.models.ItemsAdapter;
 import codingsharks.ezpricer.models.Vendor;
 import codingsharks.ezpricer.models.vendorListAdapter;
 
@@ -91,7 +85,7 @@ public class CompareFragment extends Fragment{
         Log.i("TextView upon clicked", String.valueOf(itemET.getText()));
 
         //UNCOMMENT THIIS
-        //new RequestWalmartAPI().execute(itemName);
+        new RequestWalmartAPI().execute(itemName);
 
         vendorListAdapter adapter = new vendorListAdapter(this.getContext(), R.layout.vendor_row, vendorsList);
         mListView.setAdapter(adapter);
