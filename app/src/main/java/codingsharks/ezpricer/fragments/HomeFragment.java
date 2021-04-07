@@ -98,16 +98,14 @@ public class  HomeFragment extends Fragment {
             }
         }).attachToRecyclerView(mRecylerView);
 
-        itemAdapter.setOnItemClickListener(new ItemsAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                Log.i("ItemOnClick", "TRUE");
-                Items item = documentSnapshot.toObject(Items.class);
-                String productURL = item.getProductUrl();
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(productURL));
-                startActivity(browserIntent);
-            }
+        itemAdapter.setOnItemClickListener((documentSnapshot, position) -> {
+            Log.i("ItemOnClick", "TRUE");
+            Items item = documentSnapshot.toObject(Items.class);
+            String productURL = item.getProductUrl();
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(productURL));
+            startActivity(browserIntent);
         });
+ 
     }
 
     @Override
