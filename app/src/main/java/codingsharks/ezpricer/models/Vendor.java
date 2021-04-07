@@ -15,6 +15,9 @@ public class Vendor {
         else if ("Bestbuy".equals(name)){
             this.vendorLogoImageResource = R.drawable.bestbuy_logo;
         }
+        else if ("Amazon".equals(name)){
+            this.vendorLogoImageResource = R.drawable.shark;
+        }
         else{
             this.vendorLogoImageResource = R.drawable.ic_android_black;
         }
