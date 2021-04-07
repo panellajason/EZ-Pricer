@@ -1,5 +1,7 @@
 package codingsharks.ezpricer.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -9,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,6 +39,7 @@ import java.util.ArrayList;
 
 import codingsharks.ezpricer.R;
 import codingsharks.ezpricer.models.Items;
+import codingsharks.ezpricer.models.ItemsAdapter;
 import codingsharks.ezpricer.models.Vendor;
 import codingsharks.ezpricer.models.vendorListAdapter;
 
@@ -92,6 +96,17 @@ public class CompareFragment extends Fragment{
 
         vendorListAdapter adapter = new vendorListAdapter(this.getContext(), R.layout.vendor_row, vendorsList);
         mListView.setAdapter(adapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                view.setSelected(true);
+                Log.i("ONITEMCLICK",vendorsList.get(i).getItem().getProductUrl());
+                String productURL = vendorsList.get(i).getItem().getProductUrl();
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(productURL));
+                startActivity(browserIntent);
+            }
+        });
+
     }
     private class RequestWalmartAPI extends AsyncTask<String, Void, Items> {
 
@@ -100,6 +115,7 @@ public class CompareFragment extends Fragment{
             Log.i("String[0] is", strings[0]);
             OkHttpClient client = new OkHttpClient();
             String url = "https://walmart2.p.rapidapi.com/search?query=" + strings[0] + "&page=1";
+
             try {
                 Request request = new Request.Builder()
                         .url(url)
@@ -119,11 +135,14 @@ public class CompareFragment extends Fragment{
                         double item_price = price.getDouble("offerPrice");
                         String description = array.getJSONObject(i).getString("description");
                         String item_name = array.getJSONObject(i).getString("title");
+                        String product_id = array.getJSONObject(i).getString("usItemId");
+                        String product_url = "https://www.walmart.com/ip/" + product_id;
+                        Log.i("PRODUCT URL", product_url);
                         Log.i("ITEM name", item_name);
                         Log.i("ITEM URL", image_url);
                         Log.i("ITEM PRICE:", String.valueOf(price.getDouble("offerPrice")));
                         //change item_name
-                        return new Items(item_name, item_price, mAuth.getCurrentUser().getUid(),image_url,description);
+                        return new Items(item_name, item_price, mAuth.getCurrentUser().getUid(),image_url,product_url,description);
                     }
                 }
 //                Log.i("WalmartItem", (String) json2.get("ppu"));
@@ -135,12 +154,13 @@ public class CompareFragment extends Fragment{
         }
         @Override
         protected void onPostExecute(Items result){
-            Log.i("Item", result.toString());
+            //Log.i("Item", result.toString());
             vendorsList.clear();
             LoadImageFromWeb(result.getImageUrl());
             Vendor WalmartVendorTest = new Vendor("Walmart",result);
             vendorsList.add(WalmartVendorTest);
-            itemRef.add(result);
+//            itemRef.add(result);
+            Log.i("DONE", "done");
         }
     }
 
