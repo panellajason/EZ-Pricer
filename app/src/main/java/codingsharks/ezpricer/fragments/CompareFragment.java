@@ -87,7 +87,7 @@ public class CompareFragment extends Fragment{
         Log.i("TextView upon clicked", String.valueOf(itemET.getText()));
 
         //UNCOMMENT THIIS
-        //new RequestWalmartAPI().execute(itemName);
+        new RequestWalmartAPI().execute(itemName);
 
         vendorListAdapter adapter = new vendorListAdapter(this.getContext(), R.layout.vendor_row, vendorsList);
         mListView.setAdapter(adapter);
