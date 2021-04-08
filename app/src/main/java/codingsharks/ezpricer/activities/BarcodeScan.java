@@ -16,11 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import codingsharks.ezpricer.R;
 
-import codingsharks.ezpricer.fragments.CompareFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.mlkit.vision.barcode.Barcode;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
@@ -117,8 +115,6 @@ public class BarcodeScan extends AppCompatActivity {
                                     String rawValue = barcode.getRawValue();
 
                                     bundleAndSendData(rawValue);
-
-                                    //barcodeTV.setText(rawValue);
                                 }
                             }
                         }

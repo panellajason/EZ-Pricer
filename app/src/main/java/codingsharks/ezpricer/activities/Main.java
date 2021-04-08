@@ -33,11 +33,9 @@ public class Main extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottomNav);
 
         if (mAuth.getCurrentUser() != null) {
-
             homeFragment = new HomeFragment();
             compareFragment = new CompareFragment();
             notificationsFragment = new NotificationsFragment();
-
             //replaceFragment(homeFragment);
 
             bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -120,13 +118,18 @@ public class Main extends AppCompatActivity {
         if (mAuth.getCurrentUser() == null) {
             sendTo(Login.class);
         }
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            final String upc = extras.getString("upc");
+            String upc = extras.getString("upc");
+
+            Bundle bundle = new Bundle();
+            bundle.putString("upc2", upc);
+            compareFragment.setArguments(bundle);
+            getIntent().removeExtra("upc");
+
             replaceFragment(compareFragment);
             bottomNav.setSelectedItemId(R.id.navCompare);
-            Toast.makeText(getApplicationContext(), "UPC:" + upc, Toast.LENGTH_SHORT).show();
-
         }
     }
 }
