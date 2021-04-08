@@ -121,7 +121,7 @@ public class CompareFragment extends Fragment{
         Log.i("TextView upon clicked", String.valueOf(itemET.getText()));
 
         //UNCOMMENT THIIS
-        //new RequestWalmartAPI().execute(itemName);
+        new RequestWalmartAPI().execute(itemName);
         new RequestAmazonAPI().execute(itemName);
 
         vendorListAdapter adapter = new vendorListAdapter(this.getContext(), R.layout.vendor_row, vendorsList);
@@ -139,6 +139,7 @@ public class CompareFragment extends Fragment{
     }
 
     private class RequestWalmartAPI extends AsyncTask<String, Void, Items> {
+
         @Override
         protected Items doInBackground(String... strings) {
             Log.i("String[0] is", strings[0]);
@@ -189,7 +190,6 @@ public class CompareFragment extends Fragment{
             Log.i("DONE", "done");
         }
     }
-
 
     private class RequestAmazonAPI extends AsyncTask<String, Void, Items> {
         @Override
