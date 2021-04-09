@@ -67,7 +67,7 @@ public class CompareFragment extends Fragment{
         pImage = view_main.findViewById(R.id.productImage);
 
         itemET = view_main.findViewById(R.id.searchbox);
-        itemET.setOnKeyListener(new View.OnKeyListener() {
+        itemET.setOnKeyListener (new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
