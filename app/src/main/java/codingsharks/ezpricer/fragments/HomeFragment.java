@@ -85,7 +85,7 @@ public class  HomeFragment extends Fragment {
                 Log.i("ITEM NAME 2.", itemAdapter.getItem(position).getItem_name());
                 Log.i("ITEM URL 2.", itemAdapter.getItem(position).getProductUrl());
                 itemAdapter.deleteItem(position);
-                Toast.makeText(getContext(),"Item Deleted",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(),"Item Deleted",Toast.LENGTH_SHORT).show();
                 mRecentlyDeletedItem = itemAdapter.getItem(position);
                 showUndoSnackBar();
             }
