@@ -3,33 +3,32 @@ package codingsharks.ezpricer.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
 import codingsharks.ezpricer.R;
 import codingsharks.ezpricer.models.Items;
 import codingsharks.ezpricer.models.ItemsAdapter;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
-
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 
 public class  HomeFragment extends Fragment {
@@ -41,6 +40,8 @@ public class  HomeFragment extends Fragment {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference itemRef = db.collection("items");
+
+    private Items mRecentlyDeletedItem;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -81,8 +82,12 @@ public class  HomeFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
+                Log.i("ITEM NAME 2.", itemAdapter.getItem(position).getItem_name());
+                Log.i("ITEM URL 2.", itemAdapter.getItem(position).getProductUrl());
                 itemAdapter.deleteItem(position);
                 Toast.makeText(getContext(),"Item Deleted",Toast.LENGTH_SHORT).show();
+                mRecentlyDeletedItem = itemAdapter.getItem(position);
+                showUndoSnackBar();
             }
 
             @Override
@@ -106,6 +111,17 @@ public class  HomeFragment extends Fragment {
             startActivity(browserIntent);
         });
  
+    }
+
+    private void showUndoSnackBar() {
+        Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                "Item deleted", Snackbar.LENGTH_LONG);
+        snackBar.setAction("UNDO", v-> undoDelete());
+        snackBar.show();
+    }
+
+    private void undoDelete() {
+        itemRef.add(mRecentlyDeletedItem);
     }
 
     @Override
