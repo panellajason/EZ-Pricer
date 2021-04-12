@@ -1,17 +1,21 @@
 package codingsharks.ezpricer.models;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.w3c.dom.Text;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -25,6 +29,11 @@ public class vendorListAdapter extends ArrayAdapter<Vendor> {
     private ImageView mImageView;
     private TextView vendor_nameTV;
     private TextView item_priceTV;
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference itemRef = db.collection("items");
+
     public vendorListAdapter(@NonNull Context context, int resource, ArrayList<Vendor> objects) {
         super(context, resource, objects);
         mResource = resource;
@@ -33,6 +42,7 @@ public class vendorListAdapter extends ArrayAdapter<Vendor> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        Items item = getItem(position).getItem();
         String vendorName = getItem(position).getName();
         double itemPrice= getItem(position).getItem().getItem_price();
         int vendorLogo = getItem(position).getVendorLogoImageResource();
@@ -47,6 +57,23 @@ public class vendorListAdapter extends ArrayAdapter<Vendor> {
         vendor_nameTV.setText(vendorName);
         item_priceTV.setText(String.format(Locale.US,"%.2f",itemPrice));
         mImageView.setImageResource(vendorLogo);
+
+        ImageButton addButton = convertView.findViewById(R.id.addButton);
+        addButton.setOnClickListener(view -> {
+            Log.d("demo", "This item is being clicked" + vendorName);
+            itemRef.add(item);
+        });
         return convertView;
+    }
+    @Override
+    public boolean areAllItemsEnabled()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled(int arg0)
+    {
+        return true;
     }
 }
