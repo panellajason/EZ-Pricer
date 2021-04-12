@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">EZ Pricer</string>
-    <string name="login">Login</string>
-    <string name="button">Login</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="product_image">Product Image</string>
-    <string name="enter_an_item_name_to_search">Enter an item name to search</string>
-    <string name="search">search...</string>
-</resources>
