@@ -5,9 +5,9 @@ import codingsharks.ezpricer.R;
 public class Vendor {
     private String name;
     private int vendorLogoImageResource;
-    private Items item;
+    private Item item;
 
-    public Vendor(String name, Items item) {
+    public Vendor(String name, Item item) {
         this.name = name;
         if("Walmart".equals(name)){
             this.vendorLogoImageResource = R.drawable.walmart_logo;
@@ -32,7 +32,7 @@ public class Vendor {
         return vendorLogoImageResource;
     }
 
-    public Items getItem() {
+    public Item getItem() {
         return item;
     }
 
@@ -44,7 +44,7 @@ public class Vendor {
         this.vendorLogoImageResource = vendorLogoImageResource;
     }
 
-    public void setItem(Items item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 }

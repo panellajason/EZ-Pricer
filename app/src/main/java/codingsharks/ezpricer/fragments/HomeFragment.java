@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -26,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import codingsharks.ezpricer.R;
-import codingsharks.ezpricer.models.Items;
+import codingsharks.ezpricer.models.Item;
 import codingsharks.ezpricer.models.ItemsAdapter;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -41,7 +40,7 @@ public class  HomeFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference itemRef = db.collection("items");
 
-    private Items mRecentlyDeletedItem;
+    private Item mRecentlyDeletedItem;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -61,8 +60,8 @@ public class  HomeFragment extends Fragment {
 
         Query query = itemRef.whereEqualTo("userId", mAuth.getCurrentUser().getUid());
 
-        FirestoreRecyclerOptions<Items> options = new FirestoreRecyclerOptions.Builder<Items>()
-                .setQuery(query, Items.class)
+        FirestoreRecyclerOptions<Item> options = new FirestoreRecyclerOptions.Builder<Item>()
+                .setQuery(query, Item.class)
                 .build();
 
         itemAdapter = new ItemsAdapter(options);
@@ -105,7 +104,7 @@ public class  HomeFragment extends Fragment {
 
         itemAdapter.setOnItemClickListener((documentSnapshot, position) -> {
             Log.i("ItemOnClick", "TRUE");
-            Items item = documentSnapshot.toObject(Items.class);
+            Item item = documentSnapshot.toObject(Item.class);
             String productURL = item.getProductUrl();
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(productURL));
             startActivity(browserIntent);

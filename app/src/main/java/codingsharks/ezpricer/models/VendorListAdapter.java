@@ -22,7 +22,7 @@ import java.util.Locale;
 
 import codingsharks.ezpricer.R;
 
-public class vendorListAdapter extends ArrayAdapter<Vendor> {
+public class VendorListAdapter extends ArrayAdapter<Vendor> {
 
     private Context mContext;
     private int mResource;
@@ -34,7 +34,7 @@ public class vendorListAdapter extends ArrayAdapter<Vendor> {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference itemRef = db.collection("items");
 
-    public vendorListAdapter(@NonNull Context context, int resource, ArrayList<Vendor> objects) {
+    public VendorListAdapter(@NonNull Context context, int resource, ArrayList<Vendor> objects) {
         super(context, resource, objects);
         mResource = resource;
         mContext = context;
@@ -42,7 +42,7 @@ public class vendorListAdapter extends ArrayAdapter<Vendor> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Items item = getItem(position).getItem();
+        Item item = getItem(position).getItem();
         String vendorName = getItem(position).getName();
         double itemPrice= getItem(position).getItem().getItem_price();
         int vendorLogo = getItem(position).getVendorLogoImageResource();
