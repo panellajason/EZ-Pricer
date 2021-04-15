@@ -13,7 +13,8 @@
         style="@style/LoginTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/login" />
+        android:text="@string/login"
+        android:layout_gravity="center"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -109,8 +110,47 @@
             android:textColorHighlight="@color/purple_700"
             android:textSize="18dp"
             android:textStyle="bold"
-            tools:ignore="RtlHardcoded,RtlSymmetry" />
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            android:gravity="center"/>
+
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/forgotPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="Forgot password?"
+            android:textAlignment="textEnd"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            />
+
+        <TextView
+            android:id="@+id/forgotPasswordButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingLeft="8dp"
+            android:text="Forgot Password"
+            android:textColor="@color/red"
+            android:textColorHighlight="@color/red"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+
 
 
 </LinearLayout>

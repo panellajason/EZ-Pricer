@@ -1,12 +1,10 @@
 package codingsharks.ezpricer.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.Toast;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -49,6 +49,8 @@ public class CompareFragment extends Fragment{
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference itemRef = db.collection("items");
 
+    private ProgressDialog dialog;
+
     public CompareFragment() {
         // Required empty public constructor
     }
@@ -66,8 +68,8 @@ public class CompareFragment extends Fragment{
         Bundle extras = getArguments();
         if (extras != null) {
             String upcSearch = getArguments().getString("upc2");
+            Log.i("UPC:", upcSearch);
             getArguments().remove("upc2");
-
             createBarcodeVendorListView(view_main, upcSearch);
         }
 
@@ -75,6 +77,7 @@ public class CompareFragment extends Fragment{
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
+                Log.d("KEY PRESSED", String.valueOf(keyCode));
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Perform action on key press
@@ -94,9 +97,8 @@ public class CompareFragment extends Fragment{
     private void createBarcodeVendorListView(View view, String barcode) {
         mListView = view.findViewById(R.id.vendorListView);
         Log.i("TextView upon clicked", String.valueOf(itemET.getText()));
-
         new AsinRequestAmazonAPI().execute(barcode);
-
+        new BarcodeRequestWalmartAPI().execute(barcode);
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -132,6 +134,11 @@ public class CompareFragment extends Fragment{
     }
 
     private class RequestWalmartAPI extends AsyncTask<String, Void, Item> {
+        @Override
+        protected void onPreExecute(){
+            dialog = ProgressDialog.show(getActivity(), "",
+                    "Loading. Please wait...");
+        }
         @Override
         protected Item doInBackground(String... strings) {
             Log.i("String[0] is", strings[0]);
@@ -176,11 +183,13 @@ public class CompareFragment extends Fragment{
         protected void onPostExecute(Item result){
             //Log.i("Item", result.toString());
             vendorsList.clear();
-            LoadImageFromWeb(result.getImageUrl());
-            Vendor WalmartVendorTest = new Vendor("Walmart",result);
-            vendorsList.add(WalmartVendorTest);
-            adapter.notifyDataSetChanged();
-            Log.i("DONE", "done");
+            if (result != null) {
+                LoadImageFromWeb(result.getImageUrl());
+                Vendor WalmartVendorTest = new Vendor("Walmart", result);
+                vendorsList.add(WalmartVendorTest);
+                adapter.notifyDataSetChanged();
+                Log.i("DONE", "done");
+            }
         }
     }
 
@@ -224,11 +233,17 @@ public class CompareFragment extends Fragment{
 
         @Override
         protected void onPostExecute(Item result){
+            if(pImage.getDrawable() == null){
+                LoadImageFromWeb(result.getImageUrl());
+            }
             Log.i("AMAZON", result.toString());
             Vendor amazonVendorTest = new Vendor("Amazon",result);
             vendorsList.add(amazonVendorTest);
             adapter.notifyDataSetChanged();
             Log.i("DONE", "done");
+            if(dialog.isShowing()){
+                dialog.dismiss();
+            }
         }
     }
 
@@ -266,8 +281,44 @@ public class CompareFragment extends Fragment{
         @Override
         protected void onPostExecute(String result){
             Log.i("AMAZONBarcode", result.toString());
-
             new BarcodeRequestAmazonAPI().execute(result);
+        }
+    }
+    private static class BarcodeRequestWalmartAPI extends AsyncTask<String, Void, Item> {
+        @Override
+        protected Item doInBackground(String... strings) {
+            Log.i("In Barcode Walmart", strings[0]);
+            OkHttpClient client = new OkHttpClient();
+            String url = "https://walmart2.p.rapidapi.com/search?query=" + strings[0] + "&page=1";
+
+            try {
+                Request request = new Request.Builder()
+                        .url(url)
+                        .get()
+                        .addHeader("x-rapidapi-key", "11b6ebdc42msh09ac88d621f6ab5p177cdfjsn50498d090800")
+                        .addHeader("x-rapidapi-host", "walmart2.p.rapidapi.com")
+                        .build();
+                Response response = client.newCall(request).execute();
+                String jsonData = response.body().string();
+                Log.i("Walmart API", jsonData);
+//            try {
+//
+//                OkHttpClient client = new OkHttpClient();
+//
+//                Request request = new Request.Builder()
+//                        .url("https://walmart2.p.rapidapi.com/searchByUPC?upc=" + strings[0])
+//                        .get()
+//                        .addHeader("x-rapidapi-key", "ff3e80b51bmsh29dc9dae792a5dfp184ea2jsnd5bb6a8effd9")
+//                        .addHeader("x-rapidapi-host", "walmart2.p.rapidapi.com")
+//                        .build();
+//                Response response = client.newCall(request).execute();
+//
+//                String jsonData = response.body().string();
+//                Log.i("Walmart Barcode API", jsonData);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 
@@ -313,6 +364,9 @@ public class CompareFragment extends Fragment{
         }
         @Override
         protected void onPostExecute(Item result){
+            if(pImage.getDrawable() == null){
+                LoadImageFromWeb(result.getImageUrl());
+            }
             Log.i("AMAZONITEM", result.toString());
             Vendor amazonVendorTest = new Vendor("Amazon",result);
             vendorsList.add(amazonVendorTest);
