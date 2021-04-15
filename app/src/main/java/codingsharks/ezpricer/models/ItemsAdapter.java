@@ -1,7 +1,5 @@
 package codingsharks.ezpricer.models;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +13,16 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
-public class ItemsAdapter extends FirestoreRecyclerAdapter<Items, ItemsAdapter.ItemHolder> {
+public class ItemsAdapter extends FirestoreRecyclerAdapter<Item, ItemsAdapter.ItemHolder> {
 
     private OnItemClickListener listener;
 
-    public ItemsAdapter(@NonNull  FirestoreRecyclerOptions<Items> options) {
+    public ItemsAdapter(@NonNull  FirestoreRecyclerOptions<Item> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ItemHolder itemHolder,  int position, @NonNull Items item) {
+    protected void onBindViewHolder(@NonNull ItemHolder itemHolder,  int position, @NonNull Item item) {
         Picasso.get().load(item.getImageUrl()).into(itemHolder.mImageView);
         itemHolder.mItemTitle.setText(item.getItem_name());
         itemHolder.mItemDescription.setText("$" + String.valueOf(item.getItem_price()));

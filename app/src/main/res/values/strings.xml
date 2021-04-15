@@ -6,4 +6,5 @@
     <string name="product_image">Product Image</string>
     <string name="enter_an_item_name_to_search">Enter an item name to search</string>
     <string name="search">search...</string>
+    <string name="delete_account_alert_message">Are you sure you want to delete your account?</string>
 </resources>

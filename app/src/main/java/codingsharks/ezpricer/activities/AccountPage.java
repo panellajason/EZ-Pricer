@@ -1,6 +1,10 @@
 package codingsharks.ezpricer.activities;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -9,25 +13,39 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import codingsharks.ezpricer.R;
 import codingsharks.ezpricer.dialogs.ChangeNumberDialog;
 import codingsharks.ezpricer.dialogs.ChangePasswordDialog;
+import codingsharks.ezpricer.dialogs.DeleteAccountDialog;
+import codingsharks.ezpricer.dialogs.ReEnterPasswordDialog;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class AccountPage extends AppCompatActivity implements ChangePasswordDialog.ExampleDialogListener, ChangeNumberDialog.PhoneDialogListener{
+public class AccountPage extends AppCompatActivity
+        implements ChangePasswordDialog.ExampleDialogListener,
+                    ChangeNumberDialog.PhoneDialogListener,
+                    DeleteAccountDialog.DeleteAccountDialogListener,
+                    ReEnterPasswordDialog.ConfirmDeleteAccountDialogListener {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser user = mAuth.getCurrentUser();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DocumentReference userItemRef = db.document("user_settings/" + mAuth.getUid());
+
+    public Context context;
+    private String email;
 
     private Switch textSwitch;
     private Switch appSwitch;
@@ -37,12 +55,14 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
     private TextView editTV;
     private TextView changePasswordTV;
     private TextView logoutTV;
+    private TextView deleteAccount;
 
     private Button saveBTN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
         setContentView(R.layout.activity_account_page);
         setTitle("Account Settings");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -55,15 +75,23 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
         editTV = findViewById(R.id.editNumberTV);
         changePasswordTV = findViewById(R.id.changePasswordTV);
         logoutTV = findViewById(R.id.logoutTV);
+        deleteAccount = findViewById(R.id.delete_account);
         saveBTN = findViewById(R.id.saveBTN);
         saveBTN.setVisibility(View.INVISIBLE);
-        String email = mAuth.getCurrentUser().getEmail();
+        email = mAuth.getCurrentUser().getEmail();
         displaySettings();
 
         changePasswordTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 openDialog();
+            }
+        });
+
+        deleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                deleteAccount();
             }
         });
 
@@ -140,9 +168,59 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
             Toast.makeText(getApplicationContext(), "Phone numbers do not match", Toast.LENGTH_LONG).show();
     }
 
-    private void changePassword(String password) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    @Override
+    public void ifDeleteAccount(Boolean ifDelete) {
+        if (ifDelete) {
+            ReEnterPasswordDialog dialog = new ReEnterPasswordDialog();
+            dialog.show(getSupportFragmentManager(), "CONFIRM DELETE ACCOUNT");
+        }
+    }
 
+    public void confirmDeleteAccount(String password) {
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(email, password);
+
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("DELETE ACCOUNT",
+                                            "Account has successfully been deleted");
+                                    Toast.makeText(
+                                            context,
+                                            "Account has successfully been deleted!",
+                                            Toast.LENGTH_SHORT).show();
+                                    sendTo(Login.class);
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("DELETE ACCOUNT",
+                                        "User account FAILED to delete.");
+                                Toast.makeText(
+                                        context,
+                                        "Something went wrong!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("USER AUTHENTICATE", "Re-authentication failed!");
+                        Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void changePassword(String password) {
         user.updatePassword(password)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -196,7 +274,6 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
                     String number = documentSnapshot.getString("phone_number");
                     String formattedNumber = number.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
 
-                    String email = mAuth.getCurrentUser().getEmail();
                     phoneNumberTV.setText("Phone Number: " + formattedNumber);
 
                     textSwitch.setChecked(Integer.parseInt(documentSnapshot.getString("text_notification")) == 1);
@@ -229,5 +306,10 @@ public class AccountPage extends AppCompatActivity implements ChangePasswordDial
     private void sendTo(Class name) {
         startActivity(new Intent(AccountPage.this, name));
         finish();
+    }
+
+    private void deleteAccount() {
+        DeleteAccountDialog dialog = new DeleteAccountDialog();
+        dialog.show(getSupportFragmentManager(), "DELETE ACCOUNT");
     }
 }

@@ -2,16 +2,16 @@ package codingsharks.ezpricer.models;
 
 import codingsharks.ezpricer.R;
 
-public class Items {
+public class Item {
     private String imageUrl;
     private String item_name;
     private double item_price;
     private String userId;
     private String description;
     private String productUrl;
-    public Items(){
+    public Item(){
     }
-    public Items(String text1, double text2){
+    public Item(String text1, double text2){
         item_name = text1;
         item_price = text2;
 
@@ -25,7 +25,7 @@ public class Items {
         this.productUrl = productUrl;
     }
 
-    public Items(String name, double price, String userid, String url, String productURL, String desc){
+    public Item(String name, double price, String userid, String url, String productURL, String desc){
         item_name = name;
         item_price = price;
         userId = userid;
@@ -46,7 +46,7 @@ public class Items {
         this.description = description;
     }
 
-    public Items(String name, double price, String userid){
+    public Item(String name, double price, String userid){
         item_name = name;
         item_price = price;
         userId = userid;
