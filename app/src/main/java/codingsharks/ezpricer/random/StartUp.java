@@ -9,7 +9,7 @@ import codingsharks.ezpricer.activities.Main;
 
 public class StartUp extends AppCompatActivity {
 
-    private static int SPLASH_TIMEOUT = 2000;
+    private static int SPLASH_TIMEOUT = 1250;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

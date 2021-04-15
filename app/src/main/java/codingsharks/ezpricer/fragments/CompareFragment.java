@@ -115,7 +115,7 @@ public class CompareFragment extends Fragment{
         Log.i("TextView upon clicked", String.valueOf(itemET.getText()));
 
         //UNCOMMENT THIIS
-        //new RequestWalmartAPI().execute(itemName);
+        new RequestWalmartAPI().execute(itemName);
         new RequestAmazonAPI().execute(itemName);
 
         mListView.setAdapter(adapter);
@@ -179,6 +179,7 @@ public class CompareFragment extends Fragment{
             LoadImageFromWeb(result.getImageUrl());
             Vendor WalmartVendorTest = new Vendor("Walmart",result);
             vendorsList.add(WalmartVendorTest);
+            adapter.notifyDataSetChanged();
             Log.i("DONE", "done");
         }
     }
@@ -226,6 +227,7 @@ public class CompareFragment extends Fragment{
             Log.i("AMAZON", result.toString());
             Vendor amazonVendorTest = new Vendor("Amazon",result);
             vendorsList.add(amazonVendorTest);
+            adapter.notifyDataSetChanged();
             Log.i("DONE", "done");
         }
     }
@@ -266,7 +268,6 @@ public class CompareFragment extends Fragment{
             Log.i("AMAZONBarcode", result.toString());
 
             new BarcodeRequestAmazonAPI().execute(result);
-
         }
     }
 
@@ -274,7 +275,6 @@ public class CompareFragment extends Fragment{
         @Override
         protected Item doInBackground(final String... strings) {
             Log.i("String[0] is", strings[0]);
-
             String url2 = "https://amazon-price1.p.rapidapi.com/priceReport?asin=" + strings[0] + "&marketplace=US";
 
             try {
