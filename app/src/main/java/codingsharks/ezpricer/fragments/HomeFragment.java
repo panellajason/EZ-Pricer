@@ -106,8 +106,11 @@ public class  HomeFragment extends Fragment {
             Log.i("ItemOnClick", "TRUE");
             Item item = documentSnapshot.toObject(Item.class);
             String productURL = item.getProductUrl();
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(productURL));
-            startActivity(browserIntent);
+            Log.i("PRODUCTURL", productURL);
+            if(!"".equals(productURL)){
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(productURL));
+                startActivity(browserIntent);
+            }
         });
  
     }
