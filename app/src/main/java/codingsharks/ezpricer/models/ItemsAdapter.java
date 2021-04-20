@@ -5,13 +5,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import codingsharks.ezpricer.R;
+
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
+
+import codingsharks.ezpricer.R;
 
 public class ItemsAdapter extends FirestoreRecyclerAdapter<Item, ItemsAdapter.ItemHolder> {
 
@@ -23,7 +26,9 @@ public class ItemsAdapter extends FirestoreRecyclerAdapter<Item, ItemsAdapter.It
 
     @Override
     protected void onBindViewHolder(@NonNull ItemHolder itemHolder,  int position, @NonNull Item item) {
-        Picasso.get().load(item.getImageUrl()).into(itemHolder.mImageView);
+        if(item.getImageUrl() != ""){
+            Picasso.get().load(item.getImageUrl()).into(itemHolder.mImageView);
+        }
         itemHolder.mItemTitle.setText(item.getItem_name());
         itemHolder.mItemDescription.setText("$" + String.valueOf(item.getItem_price()));
     }
