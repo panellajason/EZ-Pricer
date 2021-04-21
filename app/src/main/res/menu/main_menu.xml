@@ -4,11 +4,6 @@
     >
 
     <item
-        android:id="@+id/actionCam"
-        android:icon="@drawable/ic_cam"
-        android:title="Search"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/actionSettings"
         android:title="Account Settings" />
     <item
