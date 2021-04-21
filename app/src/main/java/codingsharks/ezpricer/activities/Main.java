@@ -88,9 +88,6 @@ public class Main extends AppCompatActivity {
             case R.id.actionLogout:
                 logout();
                 return true;
-            case R.id.actionCam:
-                startActivity(new Intent(Main.this, BarcodeScan.class));
-                return true;
             case R.id.actionSettings:
                 startActivity(new Intent(Main.this, AccountPage.class));
                 return true;
