@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import codingsharks.ezpricer.R;
 import codingsharks.ezpricer.fragments.CompareFragment;
 import codingsharks.ezpricer.fragments.HomeFragment;
-import codingsharks.ezpricer.fragments.NotificationsFragment;
+import codingsharks.ezpricer.fragments.BarcodeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -21,9 +20,9 @@ public class Main extends AppCompatActivity {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private BottomNavigationView bottomNav;
-    private Fragment homeFragment;
-    private Fragment compareFragment;
-    private Fragment notificationsFragment;
+    private HomeFragment homeFragment;
+    private CompareFragment compareFragment;
+    private BarcodeFragment barcodeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +34,7 @@ public class Main extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             homeFragment = new HomeFragment();
             compareFragment = new CompareFragment();
-            notificationsFragment = new NotificationsFragment();
-            //replaceFragment(homeFragment);
+            barcodeFragment = new BarcodeFragment();
 
             bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -51,7 +49,7 @@ public class Main extends AppCompatActivity {
                             replaceFragment(compareFragment);
                             return true;
                         case R.id.navNotifications:
-                            replaceFragment(new NotificationsFragment());
+                            replaceFragment(new BarcodeFragment());
                             return true;
 
                         default:

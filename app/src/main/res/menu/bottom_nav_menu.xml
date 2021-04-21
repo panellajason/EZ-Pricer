@@ -14,7 +14,7 @@
         app:showAsAction="withText" />
     <item
         android:id="@+id/navNotifications"
-        android:icon="@drawable/ic_notifications"
-        android:title="Notifications"
+        android:icon="@drawable/ic_cam"
+        android:title="Barcode Scan"
         app:showAsAction="withText" />
 </menu>

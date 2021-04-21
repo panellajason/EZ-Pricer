@@ -13,10 +13,10 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import codingsharks.ezpricer.fragments.NotificationsFragment;
+import codingsharks.ezpricer.fragments.BarcodeFragment;
 
 public class SendMail extends AsyncTask<Void, Void, Void> {
-    private final NotificationsFragment context;
+    private final BarcodeFragment context;
     private Session session;
     private final String EMAIL;
     private final String SUBJECT;
@@ -25,7 +25,7 @@ public class SendMail extends AsyncTask<Void, Void, Void> {
 
     //TODO: create constructor for non-Fragment contexts
 
-    public SendMail(NotificationsFragment context, String email, String subject, String message) {
+    public SendMail(BarcodeFragment context, String email, String subject, String message) {
         this.context = context;
         this.EMAIL = email;
         this.SUBJECT = subject;
