@@ -55,7 +55,7 @@ public class VendorListAdapter extends ArrayAdapter<Vendor> {
         mImageView = convertView.findViewById(R.id.vendorLogo);
 
         vendor_nameTV.setText(vendorName);
-        item_priceTV.setText(String.format(Locale.US,"%.2f",itemPrice));
+        item_priceTV.setText("$" + String.format(Locale.US,"%.2f",itemPrice));
         mImageView.setImageResource(vendorLogo);
 
         ImageButton addButton = convertView.findViewById(R.id.addButton);

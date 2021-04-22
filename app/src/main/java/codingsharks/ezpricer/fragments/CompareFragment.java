@@ -42,6 +42,7 @@ import codingsharks.ezpricer.models.VendorListAdapter;
 public class CompareFragment extends Fragment{
     private ListView mListView;
     private ImageView pImage;
+    private ImageView refreshIV;
     private EditText itemET;
     private ArrayList<Vendor> vendorsList;
     private View view_main;
@@ -63,12 +64,13 @@ public class CompareFragment extends Fragment{
         vendorsList = new ArrayList<>();
         pImage = view_main.findViewById(R.id.productImage);
         itemET = view_main.findViewById(R.id.searchbox);
+        refreshIV = view_main.findViewById(R.id.refreshIV);
         adapter = new VendorListAdapter(this.getContext(), R.layout.vendor_row, vendorsList);
 
         //Checks to see if searched by barcode scanner
         Bundle extras = getArguments();
         if (extras != null) {
-            String upcSearch = getArguments().getString("upc2");
+            String upcSearch = getArguments().getString("upc2") + "";
             Log.i("UPC:", upcSearch);
             getArguments().remove("upc2");
             createBarcodeVendorListView(view_main, upcSearch);
@@ -87,6 +89,16 @@ public class CompareFragment extends Fragment{
                     return true;
                 }
                 return false;
+            }
+        });
+
+        refreshIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                vendorsList.clear();
+                adapter.notifyDataSetChanged();
+                itemET.setText("");
+                pImage.setImageDrawable(null);
             }
         });
         return view_main;
@@ -367,17 +379,14 @@ public class CompareFragment extends Fragment{
                 String item_name = jsonObject.getString("title");
                 JSONObject ob = new JSONObject(jsonObject.getString("lastPrice"));
                 String item_price = ob.getString("priceAmazon");
-
-                //String item_image = jsonObject.getString("imageUrl");
-                //String item_url = jsonObject.getString("detailPageURL");
-                Double newPrice = Double.parseDouble(item_price.replace("$", ""));
+                item_price = item_price.substring(0, item_price.length() - 2);
 
                 Log.i("ITEM name", item_name);
-                Log.i("ITEM URL", item_price);
-                Log.i("ITEM PRICE:", newPrice+"");
+                Log.i("ITEM URL", item_price + "");
+                Log.i("ITEM PRICE:", item_price+"");
                 Log.i("ITEM image", "");
 
-                return new Item(item_name, newPrice, mAuth.getCurrentUser().getUid(),"", "","");
+                return new Item(item_name, Double.parseDouble(item_price), mAuth.getCurrentUser().getUid(),"", "","");
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
