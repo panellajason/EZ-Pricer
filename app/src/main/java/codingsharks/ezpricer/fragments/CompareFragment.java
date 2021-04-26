@@ -134,6 +134,7 @@ public class CompareFragment extends Fragment{
         //UNCOMMENT THIIS
         new RequestWalmartAPI().execute(itemName);
         new RequestAmazonAPI().execute(itemName);
+        new RequestTargetAPI().execute(itemName);
 
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -402,5 +403,53 @@ public class CompareFragment extends Fragment{
             Log.i("DONE", "done");
         }
     }
+
+    private class RequestTargetAPI extends AsyncTask<String, Void, Item> {
+
+        @Override
+        protected Item doInBackground(String... strings) {
+            Log.i("String[0] is", strings[0]);
+            OkHttpClient client = new OkHttpClient();
+            String location_id = "2319";
+            String url="https://target1.p.rapidapi.com/products/list?storeId="+location_id+
+                    "&pageSize=20&pageNumber=1&sortBy=relevance&searchTerm="+strings[0];
+
+            try {
+                Request request = new Request.Builder()
+                        .url(url)
+                        .get()
+                        .addHeader("x-rapidapi-key","aa2d94dbbdmsh65b52c90df134e6p16e909jsn48939947babf")
+                        .addHeader("x-rapidapi-host","target1.p.rapidapi.com")
+                        .build();
+                Response response = client.newCall(request).execute();
+                String jsonData=response.body().string();
+                Log.i("TargetAPI",jsonData);
+                JSONObject object = new JSONObject(jsonData);
+                JSONArray array = object.getJSONArray("products");
+                String image_url = array.getJSONObject(0).getJSONObject("images").getString("primaryUri");
+                JSONObject oPrice = array.getJSONObject(0).getJSONObject("price");
+                String item_price = oPrice.getString("formatted_current_price");
+                double price = Double.parseDouble(item_price.substring(1));
+                String description = array.getJSONObject(0).getString("description");
+                String item_name = array.getJSONObject(0).getString("title");
+                String product_url = array.getJSONObject(0).getString("targetDotComUri");
+                Log.i("ITEMURL",image_url);
+                Log.i("ITEMPRICE:",String.valueOf(price));
+                return new Item(item_name,price,mAuth.getCurrentUser().getUid(),image_url,product_url,"");
+
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Item item) {
+            Vendor TargetVendorTest = new Vendor("Target",item);
+            vendorsList.add(TargetVendorTest);
+            Log.i("DONE","done");
+        }
+    }
+
 
 }

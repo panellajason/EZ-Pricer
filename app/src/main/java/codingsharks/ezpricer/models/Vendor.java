@@ -18,6 +18,9 @@ public class Vendor {
         else if ("Amazon".equals(name)){
             this.vendorLogoImageResource = R.drawable.amazonlogo;
         }
+        else if ("Target".equals(name)){
+            this.vendorLogoImageResource = R.drawable.target;
+        }
         else{
             this.vendorLogoImageResource = R.drawable.ic_android_black;
         }
