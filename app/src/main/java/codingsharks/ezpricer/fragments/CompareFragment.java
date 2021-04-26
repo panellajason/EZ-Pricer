@@ -180,14 +180,15 @@ public class CompareFragment extends Fragment{
                         double item_price = price.getDouble("offerPrice");
                         String description = array.getJSONObject(i).getString("description");
                         String item_name = array.getJSONObject(i).getString("title");
+                        String name = item_name.replace("<mark>", "").replace("</mark>", "");
                         String product_id = array.getJSONObject(i).getString("usItemId");
                         String product_url = "https://www.walmart.com/ip/" + product_id;
                         Log.i("PRODUCT URL", product_url);
-                        Log.i("ITEM name", item_name);
+                        Log.i("ITEM name", name);
                         Log.i("ITEM URL", image_url);
                         Log.i("ITEM PRICE:", String.valueOf(price.getDouble("offerPrice")));
                         //change item_name
-                        return new Item(item_name, item_price, mAuth.getCurrentUser().getUid(),image_url,product_url,description);
+                        return new Item(name, item_price, mAuth.getCurrentUser().getUid(),image_url,product_url,description);
                     }
                 }
             } catch (IOException | JSONException e) {
@@ -229,17 +230,18 @@ public class CompareFragment extends Fragment{
                 JSONArray jArray= new JSONArray(jsonData);
 
                 String item_name = jArray.getJSONObject(0).getString("title");
+                String name = item_name.replace("<mark>", "").replace("</mark>", "");
                 String item_price = jArray.getJSONObject(0).getString("price");
                 String item_image = jArray.getJSONObject(0).getString("imageUrl");
                 String item_url = jArray.getJSONObject(0).getString("detailPageURL");
                 Double newPrice = Double.parseDouble(item_price.replace("$", ""));
 
-                Log.i("ITEM name", item_name);
+                Log.i("ITEM name", name);
                 Log.i("ITEM URL", item_price);
                 Log.i("ITEM PRICE:", newPrice+"");
                 Log.i("ITEM image", item_image);
 
-                return new Item(item_name, newPrice, mAuth.getCurrentUser().getUid(),item_image, item_url,"");
+                return new Item(name, newPrice, mAuth.getCurrentUser().getUid(),item_image, item_url,"");
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
@@ -320,6 +322,7 @@ public class CompareFragment extends Fragment{
                 JSONObject jsonObject= new JSONObject(jsonData);
 
                 String item_name = jsonObject.getString("title");
+                String name = item_name.replace("<mark>", "").replace("</mark>", "");
                 String image_url = jsonObject.getString("imageUrl");
                 String id = jsonObject.getString("usItemId");
                 String desc = jsonObject.getString("description");
@@ -334,7 +337,7 @@ public class CompareFragment extends Fragment{
                     String key = keys.next();
                     Log.i("KEYS",key);
                 }
-                return new Item(item_name, price, mAuth.getCurrentUser().getUid(),image_url,product_url ,desc);
+                return new Item(name, price, mAuth.getCurrentUser().getUid(),image_url,product_url ,desc);
 
 
             } catch (IOException | JSONException e) {
@@ -378,6 +381,7 @@ public class CompareFragment extends Fragment{
                 JSONObject jsonObject= new JSONObject(jsonData);
 
                 String item_name = jsonObject.getString("title");
+                String name = item_name.replace("<mark>", "").replace("</mark>", "");
                 JSONObject ob = new JSONObject(jsonObject.getString("lastPrice"));
                 String item_price = ob.getString("priceAmazon");
                 item_price = item_price.substring(0, item_price.length() - 2);
@@ -387,7 +391,7 @@ public class CompareFragment extends Fragment{
                 Log.i("ITEM PRICE:", item_price+"");
                 Log.i("ITEM image", "");
 
-                return new Item(item_name, Double.parseDouble(item_price), mAuth.getCurrentUser().getUid(),"", "","");
+                return new Item(name, Double.parseDouble(item_price), mAuth.getCurrentUser().getUid(),"", "","");
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
