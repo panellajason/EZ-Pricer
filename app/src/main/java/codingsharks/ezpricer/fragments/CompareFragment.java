@@ -259,13 +259,16 @@ public class CompareFragment extends Fragment{
             vendorsList.add(amazonVendorTest);
             adapter.notifyDataSetChanged();
             Log.i("DONE", "done");
-            if(dialog.isShowing()){
-                dialog.dismiss();
-            }
+
         }
     }
 
     private class AsinRequestAmazonAPI extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute(){
+            dialog = ProgressDialog.show(getActivity(), "",
+                    "Loading. Please wait...");
+        }
         @Override
         protected String doInBackground(final String... strings) {
             if (strings.length != 0) {
@@ -355,6 +358,9 @@ public class CompareFragment extends Fragment{
                 vendorsList.add(WalmartVendorTest);
                 adapter.notifyDataSetChanged();
                 Log.i("DONE", "done");
+                if(dialog.isShowing()){
+                    dialog.dismiss();
+                }
             }
         }
     }
@@ -454,6 +460,9 @@ public class CompareFragment extends Fragment{
             vendorsList.add(TargetVendorTest);
             adapter.notifyDataSetChanged();
             Log.i("DONE","done");
+            if(dialog.isShowing()){
+                dialog.dismiss();
+            }
         }
     }
 
