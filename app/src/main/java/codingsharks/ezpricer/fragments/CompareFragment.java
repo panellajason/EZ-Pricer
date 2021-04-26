@@ -436,10 +436,11 @@ public class CompareFragment extends Fragment{
                 double price = Double.parseDouble(item_price.substring(1));
                 String description = array.getJSONObject(0).getString("description");
                 String item_name = array.getJSONObject(0).getString("title");
+                String name = item_name.replace("<mark>", "").replace("</mark>", "");
                 String product_url = array.getJSONObject(0).getString("targetDotComUri");
                 Log.i("ITEMURL",image_url);
                 Log.i("ITEMPRICE:",String.valueOf(price));
-                return new Item(item_name,price,mAuth.getCurrentUser().getUid(),image_url,product_url,"");
+                return new Item(name,price,mAuth.getCurrentUser().getUid(),image_url,product_url,"");
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
@@ -451,6 +452,7 @@ public class CompareFragment extends Fragment{
         protected void onPostExecute(Item item) {
             Vendor TargetVendorTest = new Vendor("Target",item);
             vendorsList.add(TargetVendorTest);
+            adapter.notifyDataSetChanged();
             Log.i("DONE","done");
         }
     }
