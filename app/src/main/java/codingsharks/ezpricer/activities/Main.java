@@ -1,6 +1,7 @@
 package codingsharks.ezpricer.activities;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,19 +12,33 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import codingsharks.ezpricer.R;
+import codingsharks.ezpricer.dialogs.ChangePasswordDialog;
+import codingsharks.ezpricer.dialogs.ShareDialog;
 import codingsharks.ezpricer.fragments.CompareFragment;
 import codingsharks.ezpricer.fragments.HomeFragment;
-import codingsharks.ezpricer.fragments.NotificationsFragment;
+import codingsharks.ezpricer.fragments.BarcodeFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class Main extends AppCompatActivity {
+public class Main extends AppCompatActivity implements ShareDialog.ShareDialogListener {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser user = mAuth.getCurrentUser();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference itemRef = db.collection("items");
+
     private BottomNavigationView bottomNav;
-    private Fragment homeFragment;
-    private Fragment compareFragment;
-    private Fragment notificationsFragment;
+    private HomeFragment homeFragment;
+    private CompareFragment compareFragment;
+    private BarcodeFragment barcodeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +50,7 @@ public class Main extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             homeFragment = new HomeFragment();
             compareFragment = new CompareFragment();
-            notificationsFragment = new NotificationsFragment();
-            //replaceFragment(homeFragment);
+            barcodeFragment = new BarcodeFragment();
 
             bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -51,7 +65,7 @@ public class Main extends AppCompatActivity {
                             replaceFragment(compareFragment);
                             return true;
                         case R.id.navNotifications:
-                            replaceFragment(new NotificationsFragment());
+                            replaceFragment(new BarcodeFragment());
                             return true;
 
                         default:
@@ -90,8 +104,24 @@ public class Main extends AppCompatActivity {
             case R.id.actionLogout:
                 logout();
                 return true;
-            case R.id.actionCam:
-                startActivity(new Intent(Main.this, BarcodeScan.class));
+            case R.id.actionShare:
+
+                final Query query1 = itemRef.whereEqualTo("userId", mAuth.getUid());
+                query1.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull final Task<QuerySnapshot> task) {
+
+                        if (task.isSuccessful()) {
+                            if(task.getResult().size() == 0) {
+                                Toast.makeText(getApplicationContext(), "No items to share", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            else {
+                                openDialog();
+                            }
+                        }
+                    }
+                });
                 return true;
             case R.id.actionSettings:
                 startActivity(new Intent(Main.this, AccountPage.class));
@@ -99,6 +129,24 @@ public class Main extends AppCompatActivity {
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void shareWatchlist(final String to, final String subject, final String message) {
+        String recipientList = to;
+        String[] recipients = recipientList.split(",");
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, message);
+        intent.setType("message/rfc822");
+        startActivity(Intent.createChooser(intent, "Choose an email client"));
+    }
+
+
+    private void openDialog() {
+        ShareDialog dialog = new ShareDialog();
+        dialog.show(getSupportFragmentManager(), "share dialog");
     }
 
     private void logout() {

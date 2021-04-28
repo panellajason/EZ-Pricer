@@ -1,6 +1,7 @@
 package codingsharks.ezpricer.models;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import codingsharks.ezpricer.activities.Login;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -55,7 +57,7 @@ public class VendorListAdapter extends ArrayAdapter<Vendor> {
         mImageView = convertView.findViewById(R.id.vendorLogo);
 
         vendor_nameTV.setText(vendorName);
-        item_priceTV.setText(String.format(Locale.US,"%.2f",itemPrice));
+        item_priceTV.setText("$" + String.format(Locale.US,"%.2f",itemPrice));
         mImageView.setImageResource(vendorLogo);
 
         ImageButton addButton = convertView.findViewById(R.id.addButton);

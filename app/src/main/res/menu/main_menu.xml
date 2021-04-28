@@ -2,12 +2,12 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
-
     <item
-        android:id="@+id/actionCam"
-        android:icon="@drawable/ic_cam"
-        android:title="Search"
+        android:id="@+id/actionShare"
+        android:icon="@drawable/ic_share"
+        android:title="Share"
         app:showAsAction="always" />
+
     <item
         android:id="@+id/actionSettings"
         android:title="Account Settings" />
