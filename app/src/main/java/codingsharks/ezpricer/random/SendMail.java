@@ -1,6 +1,8 @@
 package codingsharks.ezpricer.random;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,7 +18,8 @@ import javax.mail.internet.MimeMessage;
 import codingsharks.ezpricer.fragments.NotificationsFragment;
 
 public class SendMail extends AsyncTask<Void, Void, Void> {
-    private final NotificationsFragment context;
+    @SuppressLint("StaticFieldLeak")
+    private final Context context;
     private Session session;
     private final String EMAIL;
     private final String SUBJECT;
@@ -25,7 +28,7 @@ public class SendMail extends AsyncTask<Void, Void, Void> {
 
     //TODO: create constructor for non-Fragment contexts
 
-    public SendMail(NotificationsFragment context, String email, String subject, String message) {
+    public SendMail(Context context, String email, String subject, String message) {
         this.context = context;
         this.EMAIL = email;
         this.SUBJECT = subject;
@@ -63,7 +66,7 @@ public class SendMail extends AsyncTask<Void, Void, Void> {
     protected void onPreExecute() {
         super.onPreExecute();
         Log.i("EMAIL", "Pre Execute");
-        progressDialog = ProgressDialog.show(context.getActivity(), "Sending message", "Please wait...", false, false);
+        progressDialog = ProgressDialog.show(context, "Sending message", "Please wait...", false, false);
     }
 
     @Override
@@ -71,6 +74,6 @@ public class SendMail extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
         Log.i("EMAIL", "Post Execute");
         progressDialog.dismiss();
-        Toast.makeText(context.getActivity(),"Message Sent",Toast.LENGTH_LONG).show();
+        Toast.makeText(context,"Message Sent",Toast.LENGTH_LONG).show();
     }
 }
