@@ -17,6 +17,8 @@ import codingsharks.ezpricer.dialogs.ShareDialog;
 import codingsharks.ezpricer.fragments.CompareFragment;
 import codingsharks.ezpricer.fragments.HomeFragment;
 import codingsharks.ezpricer.fragments.BarcodeFragment;
+import codingsharks.ezpricer.fragments.NotificationsFragment;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -39,6 +41,7 @@ public class Main extends AppCompatActivity implements ShareDialog.ShareDialogLi
     private HomeFragment homeFragment;
     private CompareFragment compareFragment;
     private BarcodeFragment barcodeFragment;
+    private NotificationsFragment notificationsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class Main extends AppCompatActivity implements ShareDialog.ShareDialogLi
             homeFragment = new HomeFragment();
             compareFragment = new CompareFragment();
             barcodeFragment = new BarcodeFragment();
+            notificationsFragment = new NotificationsFragment();
 
             bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -64,10 +68,11 @@ public class Main extends AppCompatActivity implements ShareDialog.ShareDialogLi
                         case R.id.navCompare:
                             replaceFragment(compareFragment);
                             return true;
-                        case R.id.navNotifications:
+                        case R.id.nvaBarcode:
                             replaceFragment(new BarcodeFragment());
                             return true;
-
+                        case R.id.navNotifications:
+                            replaceFragment(new NotificationsFragment());
                         default:
                             return false;
                     }
