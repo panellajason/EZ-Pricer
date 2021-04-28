@@ -259,7 +259,9 @@ public class CompareFragment extends Fragment{
             vendorsList.add(amazonVendorTest);
             adapter.notifyDataSetChanged();
             Log.i("DONE", "done");
-
+            if(dialog.isShowing()){
+                dialog.dismiss();
+            }
         }
     }
 
@@ -303,6 +305,7 @@ public class CompareFragment extends Fragment{
         protected void onPostExecute(String result){
             Log.i("AMAZONBarcode", result.toString());
             new BarcodeRequestAmazonAPI().execute(result);
+
         }
     }
     private class BarcodeRequestWalmartAPI extends AsyncTask<String, Void, Item> {
@@ -331,7 +334,14 @@ public class CompareFragment extends Fragment{
                 String desc = jsonObject.getString("description");
 
                 JSONObject jsonObject1 = jsonObject.getJSONObject("primaryOffer");
-                Double price = jsonObject1.getDouble("minPrice");
+                Double price = 0.0;
+                if(jsonObject1.has("minPrice")){
+                    price = jsonObject1.getDouble("minPrice");
+                }
+                else if(jsonObject1.has("offerPrice")) {
+                    price = jsonObject1.getDouble("offerPrice");
+                }
+
 
                 Iterator<String> keys = jsonObject1.keys();
 
@@ -411,6 +421,9 @@ public class CompareFragment extends Fragment{
             vendorsList.add(amazonVendorTest);
             adapter.notifyDataSetChanged();
             Log.i("DONE", "done");
+            if(dialog.isShowing()){
+                dialog.dismiss();
+            }
         }
     }
 
