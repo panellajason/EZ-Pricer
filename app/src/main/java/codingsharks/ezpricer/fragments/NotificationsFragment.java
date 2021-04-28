@@ -81,11 +81,9 @@ public class NotificationsFragment extends Fragment {
                         .setManager(Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class))
                         .setContext(getActivity());
 
-                try {
-                    notificationController.priceDropNotification();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
+                notificationController.priceDropNotification();
+
             }
         });
 
