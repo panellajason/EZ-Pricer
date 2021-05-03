@@ -54,7 +54,6 @@ public class CompareFragment extends Fragment{
     private ProgressDialog dialog;
 
     public CompareFragment() {
-        // Required empty public constructor
     }
 
     @Override
